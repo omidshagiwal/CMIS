@@ -11,8 +11,8 @@ namespace CMIS.Models
         public string SubjectName { get; set; }
         public string SubjectNameEnglish { get; set; }
         public string Remarks { get; set; } 
-        public int Status { get; set; }
-        public int CertficateOrderNo { get; set; }
+        public bool Status { get; set; }
+        public int? CertficateOrderNo { get; set; }
         public int ViewOrder { get; set; }
     }
 }
