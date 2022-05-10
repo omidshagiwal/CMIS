@@ -18,6 +18,8 @@
     <Compile Remove="Data\Migrations\20220509182243_studentsubjectupdate.Designer.cs" />
     <Compile Remove="Data\Migrations\20220509183137_5tablfromimage.cs" />
     <Compile Remove="Data\Migrations\20220509183137_5tablfromimage.Designer.cs" />
+    <Compile Remove="Data\Migrations\20220510114226_model_studentclassSubject.cs" />
+    <Compile Remove="Data\Migrations\20220510114226_model_studentclassSubject.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

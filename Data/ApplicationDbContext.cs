@@ -18,9 +18,10 @@ namespace CMIS.Data
         public DbSet<LookUp_District> LookUp_District { get; set; }
         public DbSet<LookUp_School> LookUp_School { get; set; }
         public DbSet<LookUp_Class> LookUp_Class { get; set; }
-        public DbSet<LookUp_StudentSubject> LookUp_StudentSubject { get; set; }
-        public DbSet<Section> Section { get; set; }
-        public DbSet<EnrollmentStatus> EnrollmentStatus { get; set; }
+        public DbSet<LookUp_Student_Subject> LookUp_StudentSubject { get; set; }
+        public DbSet<LookUp_Section> Section { get; set; }
+        public DbSet<Lookup_Enrollment_Status> EnrollmentStatus { get; set; }
         public DbSet<Year> Year { get; set; }
+        public DbSet<Student_Class_Subject> StudentClassSubject { get; set; }
     }
 }

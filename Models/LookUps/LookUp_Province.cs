@@ -7,7 +7,7 @@ namespace CMIS.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int ProvinceId { get; set; }
+        public int ProvinceID { get; set; }
         public string ProvinceNameDari { get; set; }
         public string ProvinceNameEng { get; set; }
         public string ProvinceNamePashto { get; set; }

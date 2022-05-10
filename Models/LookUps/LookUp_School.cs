@@ -8,16 +8,19 @@ namespace CMIS.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int SchoolId { get; set; }
+        public int SchoolID { get; set; }
         public string SchoolNameDari { get; set; }
         public string SchoolNameEnglish { get; set; }
         public string SchoolNamePashto { get; set; }
-        public string SchoolName_Previous { get; set; }
+        public string SchoolNamePrevious { get; set; } 
         public int DistrictId { get; set; }
-        public LookUp_District District { get; set; }
-        public int CurrentStageId { get; set; }
+        public int CurrentStageId { get; set; } //is missing
         public bool IsDeleted { get; set; }
         public string EntryUserId { get; set; }
         public DateTime EntryDate { get; set; }
+
+
+        //Relation
+        public LookUp_District District { get; set; }
     }
 }

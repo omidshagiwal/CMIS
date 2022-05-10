@@ -7,11 +7,15 @@ namespace CMIS.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int DistrictId { get; set; }
+        public int DistrictID { get; set; }
         public string DistrictName { get; set; }
-        public int ProvinceId { get; set; }
-        public LookUp_Province province { get; set; }
+        public int ProvinceID { get; set; }
         public string DistrictNameEnglish { get; set; }
         public int? DistrictIdNew { get; set; }
+
+
+        //Relation
+        public LookUp_Province province { get; set; }
+
     }
 }

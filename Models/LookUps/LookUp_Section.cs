@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CMIS.Models.Main_Models
 {
-    public class Section
+    public class LookUp_Section
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)] 

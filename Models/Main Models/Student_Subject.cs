@@ -1,18 +1,19 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CMIS.Models
+namespace Directorate_Certificate_App.Models.Models
 {
-    public class LookUp_StudentSubject
+    public class Student_Subject
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)] 
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int SubjectID { get; set; }
         public string SubjectName { get; set; }
-        public string SubjectNameEnglish { get; set; }
-        public string Remarks { get; set; } 
+        public string SubjectEngName { get; set; }
+        public string Remarks { get; set; }
         public bool Status { get; set; }
-        public int? CertficateOrderNo { get; set; }
+        public int CertificateOrderNo { get; set; }
         public int ViewOrder { get; set; }
+
     }
 }
