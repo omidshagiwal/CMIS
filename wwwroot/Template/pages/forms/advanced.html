@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>پنل مدیریت | فرم پیشرفته</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+ 
+  <!-- Select2 -->
+  <link rel="stylesheet" href="../../plugins/select2/select2.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+  <!-- Google Font: Source Sans Pro -->
+
+
+  <!-- bootstrap rtl -->
+  <link rel="stylesheet" href="../../dist/css/bootstrap-rtl.min.css">
+  <!-- template rtl version -->
+ 
+</head>
+<body class="hold-transition sidebar-mini">
+
+
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>چند انتخابی</label>
+                  <select class="form-control select2"  multiple="multiple" data-placeholder="یک استان انتخاب کنید"
+                          style="width: 100%;text-align: right">
+                    <option>مازندران</option>
+                    <option>شیراز</option>
+                    <option>گلستان</option>
+                    <option>اردبیل</option>
+                    <option>خوزستان</option>
+                    <option>سیستان و بلوچستان</option>
+                    <option>مشهد</option>
+                  </select>
+                </div>
+<!-- jQuery -->
+<script src="../../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Select2 -->
+<script src="../../plugins/select2/select2.full.min.js"></script>
+<script>
+  $(function () {
+    //Initialize Select2 Elements
+    $('.select2').select2()
+
+
+  })
+</script>
+</body>
+</html>
