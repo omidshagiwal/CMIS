@@ -19,7 +19,7 @@ namespace CMIS.Models.Main_Models
         public int Status { get; set; }
 
         //Relation
-        public LookUp_Student_Subject LookUp_Student_Subject { get; set; }
+        public LookUp_Subject LookUp_Student_Subject { get; set; }
         public LookUp_School LookUp_School { get; set; }
         public Student_Profile Student_Profile { get; set; }
     }

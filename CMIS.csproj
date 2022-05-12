@@ -20,6 +20,20 @@
     <Compile Remove="Data\Migrations\20220509183137_5tablfromimage.Designer.cs" />
     <Compile Remove="Data\Migrations\20220510114226_model_studentclassSubject.cs" />
     <Compile Remove="Data\Migrations\20220510114226_model_studentclassSubject.Designer.cs" />
+    <Compile Remove="Data\Migrations\20220512112838_20tables.cs" />
+    <Compile Remove="Data\Migrations\20220512112838_20tables.Designer.cs" />
+    <Compile Remove="Data\Migrations\20220512114354_LookUp_Province.cs" />
+    <Compile Remove="Data\Migrations\20220512114354_LookUp_Province.Designer.cs" />
+    <Compile Remove="Data\Migrations\20220512114541_LookUp_Province.cs" />
+    <Compile Remove="Data\Migrations\20220512114541_LookUp_Province.Designer.cs" />
+    <Compile Remove="Data\Migrations\20220512122336_Student_Profile.cs" />
+    <Compile Remove="Data\Migrations\20220512122336_Student_Profile.Designer.cs" />
+    <Compile Remove="Data\Migrations\20220512122439_Student_Subject.cs" />
+    <Compile Remove="Data\Migrations\20220512122439_Student_Subject.Designer.cs" />
+    <Compile Remove="Data\Migrations\20220512122631_Student_Subject.cs" />
+    <Compile Remove="Data\Migrations\20220512122631_Student_Subject.Designer.cs" />
+    <Compile Remove="Data\Migrations\20220512134448_biuldLookupTables.cs" />
+    <Compile Remove="Data\Migrations\20220512134448_biuldLookupTables.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

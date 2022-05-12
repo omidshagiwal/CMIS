@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CMIS.Models.Main_Models
 {
-    public class Year
+    public class LookUp_Year
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
