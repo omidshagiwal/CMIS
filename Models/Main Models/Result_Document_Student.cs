@@ -18,7 +18,7 @@ namespace Directorate_Certificate_App.Models
         public int StudentOrderNo { get; set; }
 
         //Relationship
-        public Student_Profile Student_Profile{ get; set; }
+        //public StudentProfile Student_Profile{ get; set; }
 
     }
 }

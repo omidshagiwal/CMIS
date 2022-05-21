@@ -37,7 +37,7 @@ namespace CMIS.Data
         //public DbSet<Student_Class_Info> Student_Class_Info { get; set; } //key
         //public DbSet<Student_Class_Subject_Year> Student_Class_Subject_Year { get; set; }
         //public DbSet<Student_Issued_Certificate> Student_Issued_Certificate { get; set; } //key
-        //public DbSet<Student_Profile> Student_Profile { get; set; } //key
+        public DbSet<StudentProfile> StudentProfiles { get; set; } //key
         //public DbSet<Student_Subject> Student_Subject { get; set; } //no data
         //public DbSet<Student_Subject_Exam_Marks> Student_Subject_Exam_Marks { get; set; }
     }

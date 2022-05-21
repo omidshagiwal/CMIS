@@ -19,7 +19,7 @@ namespace Directorate_Certificate_App.Models.Models
 
 
         //relationship
-        public virtual Student_Profile student_profile { get; set; }
+        public virtual StudentProfile student_profile { get; set; }
         public LookUp_Class lookup_class { get; set; }
         public Student_Subject student_subject { get; set; }
     }

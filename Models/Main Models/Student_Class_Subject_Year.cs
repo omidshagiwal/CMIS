@@ -21,6 +21,6 @@ namespace CMIS.Models.Main_Models
         //Relation
         public LookUp_Subject LookUp_Student_Subject { get; set; }
         public LookUp_School LookUp_School { get; set; }
-        public Student_Profile Student_Profile { get; set; }
+        public StudentProfile Student_Profile { get; set; }
     }
 }
