@@ -12,8 +12,7 @@ namespace CMIS.Models
         public string SchoolNameDari { get; set; }
         public string SchoolNameEnglish { get; set; }
         public string SchoolNamePashto { get; set; }
-        public string SchoolNamePrevious { get; set; } 
-        public int DistrictId { get; set; }
+        public string SchoolNamePrevious { get; set; }  
         public int CurrentStageId { get; set; } //is missing
         public bool IsDeleted { get; set; }
         public string EntryUserId { get; set; }
@@ -21,6 +20,8 @@ namespace CMIS.Models
 
 
         //Relation
-        public LookUp_District District { get; set; }
+        public int DistrictID { get; set; }
+        [ForeignKey("DistrictID")]
+        public virtual LookUp_District District { get; set; }
     }
 }

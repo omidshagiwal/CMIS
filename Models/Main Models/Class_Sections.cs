@@ -16,8 +16,8 @@ namespace Directorate_Certificate_App.Models.Models
         public int Year { get; set; }
 
         //relationship 
-        public LookUp_Class Lookup_Class { get; set; }
-        public LookUp_School Lookup_School{ get; set; }
-        public LookUp_Section Lookup_Section { get; set; }
+        public virtual LookUp_Class Lookup_Class { get; set; }
+        public virtual LookUp_School Lookup_School { get; set; }
+        public virtual LookUp_Section Lookup_Section { get; set; }
     }
 }

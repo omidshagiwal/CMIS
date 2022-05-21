@@ -4,18 +4,20 @@ using CMIS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CMIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220513192956_changenameDistrictID")]
+    partial class changenameDistrictID
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.24")
+                .HasAnnotation("ProductVersion", "3.1.23")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -238,11 +240,6 @@ namespace CMIS.Data.Migrations
                     b.ToTable("Lookup_Enrollment_Status");
                 });
 
-
-            modelBuilder.Entity("Directorate_Certificate_App.Models.Models.StudentProfile", b =>
-                {
-                    b.Property<int>("Id")
-
             modelBuilder.Entity("Directorate_Certificate_App.Models.Models.Student_Class_Info", b =>
                 {
                     b.Property<int>("StudentID")
@@ -368,54 +365,14 @@ namespace CMIS.Data.Migrations
                     b.Property<string>("Entry_Type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FatherName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FatherNameEnglish")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Gender")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("GrandFatherName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("Lookup_ProvinceProvinceID")
                         .HasColumnType("int");
 
-                    b.Property<string>("NID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NameEnglish")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Picture")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Lookup_ProvinceProvinceID")
-                        .HasColumnType("int");
                     b.Property<int>("ProvinceID")
                         .HasColumnType("int");
 
                     b.Property<string>("Remarks")
                         .HasColumnType("nvarchar(max)");
-                    b.Property<bool>("ThreeYearMarks")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Lookup_ProvinceProvinceID");
-
-                    b.ToTable("StudentProfiles");
 
                     b.Property<string>("StudentEngName")
                         .HasColumnType("nvarchar(max)");
@@ -449,7 +406,7 @@ namespace CMIS.Data.Migrations
                     b.HasIndex("Lookup_ProvinceProvinceID");
 
                     b.ToTable("Student_Profile");
-
+                });
 
             modelBuilder.Entity("Directorate_Certificate_App.Models.Models.Student_Subject", b =>
                 {
@@ -708,9 +665,6 @@ namespace CMIS.Data.Migrations
                         .IsRequired();
                 });
 
-
-            modelBuilder.Entity("Directorate_Certificate_App.Models.Models.StudentProfile", b =>
-
             modelBuilder.Entity("Directorate_Certificate_App.Models.Models.Student_Class_Info", b =>
                 {
                     b.HasOne("CMIS.Models.LookUp_Class", "LookUp_Class")
@@ -739,7 +693,7 @@ namespace CMIS.Data.Migrations
                 });
 
             modelBuilder.Entity("Directorate_Certificate_App.Models.Models.Student_Profile", b =>
-           {
+                {
                     b.HasOne("CMIS.Models.LookUp_Province", "Lookup_Province")
                         .WithMany()
                         .HasForeignKey("Lookup_ProvinceProvinceID");
