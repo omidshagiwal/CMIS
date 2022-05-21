@@ -12,6 +12,8 @@ namespace CMIS.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
+        //using FluentAPI
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -30,15 +32,24 @@ namespace CMIS.Data
 
 
         //// Main Models
+        public DbSet<Student_Profile> Student_Profile { get; set; } //key
+        public DbSet<Student_Class_Info> Student_Class_Info { get; set; } //key
+
+
         //public DbSet<Class_Sections> Class_Sections { get; set; }
         //public DbSet<Result_Document> Result_Documents { get; set; }
         //public DbSet<Result_Document_Student> Result_Document_Student { get; set; }
         //public DbSet<Student_Attendence> Student_Attendence { get; set; }
-        //public DbSet<Student_Class_Info> Student_Class_Info { get; set; } //key
         //public DbSet<Student_Class_Subject_Year> Student_Class_Subject_Year { get; set; }
         //public DbSet<Student_Issued_Certificate> Student_Issued_Certificate { get; set; } //key
-        //public DbSet<Student_Profile> Student_Profile { get; set; } //key
         //public DbSet<Student_Subject> Student_Subject { get; set; } //no data
         //public DbSet<Student_Subject_Exam_Marks> Student_Subject_Exam_Marks { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Student_Class_Info>().HasKey(p => new { p.StudentID, p.ClassID, p.GraduationYear });
+        }
     }
 }

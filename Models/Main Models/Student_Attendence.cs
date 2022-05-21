@@ -18,7 +18,7 @@ namespace Directorate_Certificate_App.Models.Models
         public int Leave { get; set; }
 
         //Relationship
-        public LookUp_Class Lookup_Class { get; set; }
+        public virtual LookUp_Class Lookup_Class { get; set; }
         public virtual Student_Profile student_profile { get; set; }
     }
 }

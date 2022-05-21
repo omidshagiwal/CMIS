@@ -4,14 +4,16 @@ using CMIS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CMIS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220513144810_13maychecking")]
+    partial class _13maychecking
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,7 +123,7 @@ namespace CMIS.Data.Migrations
                     b.Property<int>("CurrentStageId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DistrictID")
+                    b.Property<int>("DistrictId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EntryDate")
@@ -147,7 +149,7 @@ namespace CMIS.Data.Migrations
 
                     b.HasKey("SchoolID");
 
-                    b.HasIndex("DistrictID");
+                    b.HasIndex("DistrictId");
 
                     b.ToTable("LookUp_School");
                 });
@@ -658,7 +660,7 @@ namespace CMIS.Data.Migrations
                 {
                     b.HasOne("CMIS.Models.LookUp_District", "District")
                         .WithMany()
-                        .HasForeignKey("DistrictID")
+                        .HasForeignKey("DistrictId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

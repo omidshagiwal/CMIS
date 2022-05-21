@@ -22,10 +22,10 @@ namespace Directorate_Certificate_App.Models.Models
         public string TazkiraNumber { get; set; }
         public int ClassEnrollment { get; set; }
         public string Entry_Type { get; set; } 
-        public bool ThreeYearMarks { get; set; }
+        public int ThreeYearMarks { get; set; }
 
 
         //Relationship
-        public LookUp_Province Lookup_Province { get; set; }
+        public virtual LookUp_Province Lookup_Province { get; set; }
     }
 }
