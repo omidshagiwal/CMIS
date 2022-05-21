@@ -13,7 +13,6 @@ namespace CMIS.Data
     public class ApplicationDbContext : IdentityDbContext
     {
         //using FluentAPI
-
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -30,20 +29,15 @@ namespace CMIS.Data
         public DbSet<LookUp_ClassSubject> LookUp_ClassSubject { get; set; }
         public DbSet<LookUp_Student_Status> LookUp_Student_Status { get; set; }
 
-
         //// Main Models
-        public DbSet<Student_Profile> Student_Profile { get; set; } //key
-        public DbSet<Student_Class_Info> Student_Class_Info { get; set; } //key
-
-
+        public DbSet<StudentProfile> StudentsProfile { get; set; }
+        public DbSet<Student_Class_Info> Student_Class_Info { get; set; }
         //public DbSet<Class_Sections> Class_Sections { get; set; }
         //public DbSet<Result_Document> Result_Documents { get; set; }
         //public DbSet<Result_Document_Student> Result_Document_Student { get; set; }
         //public DbSet<Student_Attendence> Student_Attendence { get; set; }
         //public DbSet<Student_Class_Subject_Year> Student_Class_Subject_Year { get; set; }
-        //public DbSet<Student_Issued_Certificate> Student_Issued_Certificate { get; set; } //key
-
-        public DbSet<StudentProfile> StudentProfiles { get; set; } //key
+        //public DbSet<Student_Issued_Certificate> Student_Issued_Certificate { get; set; }
         //public DbSet<Student_Subject> Student_Subject { get; set; } //no data
         //public DbSet<Student_Subject_Exam_Marks> Student_Subject_Exam_Marks { get; set; }
 

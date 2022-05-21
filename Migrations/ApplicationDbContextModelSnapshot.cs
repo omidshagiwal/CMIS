@@ -4,20 +4,18 @@ using CMIS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace CMIS.Data.Migrations
+namespace CMIS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220510081502_nullable_studentsubject")]
-    partial class nullable_studentsubject
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.23")
+                .HasAnnotation("ProductVersion", "3.1.24")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -34,9 +32,44 @@ namespace CMIS.Data.Migrations
                     b.ToTable("LookUp_Class");
                 });
 
+            modelBuilder.Entity("CMIS.Models.LookUp_ClassSubject", b =>
+                {
+                    b.Property<int>("ClassSubjectID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClassID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LookUp_ClassClassID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SortNo")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("Student_SubjectSubjectID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubjectID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ClassSubjectID");
+
+                    b.HasIndex("LookUp_ClassClassID");
+
+                    b.HasIndex("Student_SubjectSubjectID");
+
+                    b.ToTable("LookUp_ClassSubject");
+                });
+
             modelBuilder.Entity("CMIS.Models.LookUp_District", b =>
                 {
-                    b.Property<int>("DistrictId")
+                    b.Property<int>("DistrictID")
                         .HasColumnType("int");
 
                     b.Property<int?>("DistrictIdNew")
@@ -48,19 +81,19 @@ namespace CMIS.Data.Migrations
                     b.Property<string>("DistrictNameEnglish")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProvinceId")
+                    b.Property<int>("ProvinceID")
                         .HasColumnType("int");
 
-                    b.HasKey("DistrictId");
+                    b.HasKey("DistrictID");
 
-                    b.HasIndex("ProvinceId");
+                    b.HasIndex("ProvinceID");
 
                     b.ToTable("LookUp_District");
                 });
 
             modelBuilder.Entity("CMIS.Models.LookUp_Province", b =>
                 {
-                    b.Property<int>("ProvinceId")
+                    b.Property<int>("ProvinceID")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
@@ -75,20 +108,20 @@ namespace CMIS.Data.Migrations
                     b.Property<string>("ProvinceNamePashto")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ProvinceId");
+                    b.HasKey("ProvinceID");
 
                     b.ToTable("LookUp_Province");
                 });
 
             modelBuilder.Entity("CMIS.Models.LookUp_School", b =>
                 {
-                    b.Property<int>("SchoolId")
+                    b.Property<int>("SchoolID")
                         .HasColumnType("int");
 
                     b.Property<int>("CurrentStageId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DistrictId")
+                    b.Property<int>("DistrictID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EntryDate")
@@ -109,19 +142,35 @@ namespace CMIS.Data.Migrations
                     b.Property<string>("SchoolNamePashto")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SchoolName_Previous")
+                    b.Property<string>("SchoolNamePrevious")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("SchoolId");
+                    b.HasKey("SchoolID");
 
-                    b.HasIndex("DistrictId");
+                    b.HasIndex("DistrictID");
 
                     b.ToTable("LookUp_School");
                 });
 
-            modelBuilder.Entity("CMIS.Models.LookUp_StudentSubject", b =>
+            modelBuilder.Entity("CMIS.Models.LookUp_Student_Status", b =>
                 {
-                    b.Property<int>("SubjectID")
+                    b.Property<int>("StatusID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StatusEnglishName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StatusPashtoName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("StatusID");
+
+                    b.ToTable("LookUp_Student_Status");
+                });
+
+            modelBuilder.Entity("CMIS.Models.LookUp_Subject", b =>
+                {
+                    b.Property<int>("StudentSubjectID")
                         .HasColumnType("int");
 
                     b.Property<int?>("CertficateOrderNo")
@@ -142,25 +191,12 @@ namespace CMIS.Data.Migrations
                     b.Property<int>("ViewOrder")
                         .HasColumnType("int");
 
-                    b.HasKey("SubjectID");
+                    b.HasKey("StudentSubjectID");
 
-                    b.ToTable("LookUp_StudentSubject");
+                    b.ToTable("LookUp_Subject");
                 });
 
-            modelBuilder.Entity("CMIS.Models.Main_Models.EnrollmentStatus", b =>
-                {
-                    b.Property<int>("EnrollmentStatusID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Condidtion")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("EnrollmentStatusID");
-
-                    b.ToTable("EnrollmentStatus");
-                });
-
-            modelBuilder.Entity("CMIS.Models.Main_Models.Section", b =>
+            modelBuilder.Entity("CMIS.Models.Main_Models.LookUp_Section", b =>
                 {
                     b.Property<int>("SectionID")
                         .HasColumnType("int");
@@ -173,10 +209,10 @@ namespace CMIS.Data.Migrations
 
                     b.HasKey("SectionID");
 
-                    b.ToTable("Section");
+                    b.ToTable("LookUp_Section");
                 });
 
-            modelBuilder.Entity("CMIS.Models.Main_Models.Year", b =>
+            modelBuilder.Entity("CMIS.Models.Main_Models.LookUp_Year", b =>
                 {
                     b.Property<int>("YearID")
                         .HasColumnType("int");
@@ -186,7 +222,227 @@ namespace CMIS.Data.Migrations
 
                     b.HasKey("YearID");
 
-                    b.ToTable("Year");
+                    b.ToTable("LookUp_Year");
+                });
+
+            modelBuilder.Entity("CMIS.Models.Main_Models.Lookup_Enrollment_Status", b =>
+                {
+                    b.Property<int>("EnrollmentStatusID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Condidtion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("EnrollmentStatusID");
+
+                    b.ToTable("Lookup_Enrollment_Status");
+                });
+
+            modelBuilder.Entity("CMIS.Models.StudentProfile", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClassEnrollment")
+                        .HasColumnType("int");
+
+                    b.Property<long>("DateOfBirth")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Entry_Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FatherName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FatherNameEnglish")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Gender")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("GrandFatherName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Lookup_ProvinceProvinceID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEnglish")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Picture")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProvinceID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ThreeYearMarks")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Lookup_ProvinceProvinceID");
+
+                    b.ToTable("StudentsProfile");
+                });
+
+            modelBuilder.Entity("Directorate_Certificate_App.Models.Models.Student_Class_Info", b =>
+                {
+                    b.Property<int>("StudentID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClassID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GraduationYear")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AdmissionID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CenterSpecialistName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("CenterVerified_By")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CenterVerified_Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ClassPosition")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("DocumentOrderNo")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EnrollmentStatusID")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("InsertedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("InsertedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsCenterVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsFinalVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsRecordUpdated")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("LookUp_SchoolSchoolID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LookUp_SectionSectionID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Lookup_Enrollment_StatusEnrollmentStatusID")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("PromotedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("PromotedYear")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("PromotionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("SchoolID")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("SectionID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SpcialistName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StudentOrderNo")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Student_ProfileId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Student_Status_ID")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("VerifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("VerifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("StudentID", "ClassID", "GraduationYear");
+
+                    b.HasIndex("ClassID");
+
+                    b.HasIndex("LookUp_SchoolSchoolID");
+
+                    b.HasIndex("LookUp_SectionSectionID");
+
+                    b.HasIndex("Lookup_Enrollment_StatusEnrollmentStatusID");
+
+                    b.HasIndex("Student_ProfileId");
+
+                    b.ToTable("Student_Class_Info");
+                });
+
+            modelBuilder.Entity("Directorate_Certificate_App.Models.Models.Student_Subject", b =>
+                {
+                    b.Property<int>("SubjectID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CertificateOrderNo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SubjectEngName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SubjectName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ViewOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("SubjectID");
+
+                    b.ToTable("Student_Subject");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -389,11 +645,22 @@ namespace CMIS.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("CMIS.Models.LookUp_ClassSubject", b =>
+                {
+                    b.HasOne("CMIS.Models.LookUp_Class", "LookUp_Class")
+                        .WithMany()
+                        .HasForeignKey("LookUp_ClassClassID");
+
+                    b.HasOne("Directorate_Certificate_App.Models.Models.Student_Subject", "Student_Subject")
+                        .WithMany()
+                        .HasForeignKey("Student_SubjectSubjectID");
+                });
+
             modelBuilder.Entity("CMIS.Models.LookUp_District", b =>
                 {
                     b.HasOne("CMIS.Models.LookUp_Province", "province")
                         .WithMany()
-                        .HasForeignKey("ProvinceId")
+                        .HasForeignKey("ProvinceID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -402,9 +669,41 @@ namespace CMIS.Data.Migrations
                 {
                     b.HasOne("CMIS.Models.LookUp_District", "District")
                         .WithMany()
-                        .HasForeignKey("DistrictId")
+                        .HasForeignKey("DistrictID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CMIS.Models.StudentProfile", b =>
+                {
+                    b.HasOne("CMIS.Models.LookUp_Province", "Lookup_Province")
+                        .WithMany()
+                        .HasForeignKey("Lookup_ProvinceProvinceID");
+                });
+
+            modelBuilder.Entity("Directorate_Certificate_App.Models.Models.Student_Class_Info", b =>
+                {
+                    b.HasOne("CMIS.Models.LookUp_Class", "LookUp_Class")
+                        .WithMany()
+                        .HasForeignKey("ClassID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CMIS.Models.LookUp_School", "LookUp_School")
+                        .WithMany()
+                        .HasForeignKey("LookUp_SchoolSchoolID");
+
+                    b.HasOne("CMIS.Models.Main_Models.LookUp_Section", "LookUp_Section")
+                        .WithMany()
+                        .HasForeignKey("LookUp_SectionSectionID");
+
+                    b.HasOne("CMIS.Models.Main_Models.Lookup_Enrollment_Status", "Lookup_Enrollment_Status")
+                        .WithMany()
+                        .HasForeignKey("Lookup_Enrollment_StatusEnrollmentStatusID");
+
+                    b.HasOne("CMIS.Models.StudentProfile", "Student_Profile")
+                        .WithMany()
+                        .HasForeignKey("Student_ProfileId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
