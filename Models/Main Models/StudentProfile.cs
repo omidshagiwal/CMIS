@@ -9,7 +9,7 @@ namespace CMIS.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int Id { get; set; }
+        public string Id { get; set; }
         [Required]
         [DisplayName("اسم")]
         public string Name { get; set; }

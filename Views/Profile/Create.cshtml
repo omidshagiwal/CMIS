@@ -1,79 +1,96 @@
 ﻿@model CMIS.Models.StudentProfile;
 
 <div class="card">
-    <div class="card-header text-center bg-secondary">
-        <h2 class="mb-0">Student Information</h2>
+    <div class="card-header text-center bg-light">
+        <h2 class="mb-0">اضافه نمودن معلومات شاگرد</h2>
+        @ViewBag.shamsiYear
     </div>
-
     <div class="card-body">
-        <div class="row">
-
-            <div class="col">
-                <div class="form-group">
-                    <label asp-for="Name"></label>
-                    <input asp-for="Name" class="form-control" type="text" name="name" placeholder="" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="NameEnglish"></label>
-                    <input asp-for="NameEnglish" class="form-control" type="text" name="nameenglish" placeholder="" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="FatherName"></label>
-                    <input asp-for="FatherName" class="form-control" type="text" name="fathername" placeholder="" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="FatherNameEnglish"></label>
-                    <input asp-for="FatherNameEnglish" class="form-control" type="text" name="fathernameenglish" placeholder="" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="GrandFatherName"></label>
-                    <input asp-for="GrandFatherName" class="form-control" type="text" name="grandfathername" placeholder="" />
-                </div>
-            </div>
-
-            <div class="col">
-                @*<div class="form-group">
-                    <div class="row">
-                        <div class="col-4 mx-auto">
-                            <img class="card-img rounded" src="" alt="" id="imageContainer" />
-                        </div>
+        <form asp-action="Create" method="post">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="Name"></label>
+                        <input asp-for="Name" class="form-control" type="text" name="name" placeholder="اسم" />
                     </div>
-                    <label asp-for="Picture" for="studentimage"></label>
-                    <input asp-for="Picture" disabled class="form-control" type="file" id="image" onchange="selectImage()" name="studentImage" placeholder="Student Image" />
+                    <div class="form-group">
+                        <label asp-for="NameEnglish"></label>
+                        <input asp-for="NameEnglish" class="form-control" type="text" name="nameenglish" placeholder="اسم به انگلیسی" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="FatherName"></label>
+                        <input asp-for="FatherName" class="form-control" type="text" name="fathername" placeholder="اسم پدر" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="FatherNameEnglish"></label>
+                        <input asp-for="FatherNameEnglish" class="form-control" type="text" name="fathernameenglish" placeholder="اسم پدر به انگلیسی" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="GrandFatherName"></label>
+                        <input asp-for="GrandFatherName" class="form-control" type="text" name="grandfathername" placeholder="اسم پدرکلان" />
+                    </div>
+                </div>
+
+                <div class="col">
+                    @*<div class="form-group">
+                <div class="row">
+                <div class="col-4 mx-auto">
+                <img class="card-img rounded" src="" alt="" id="imageContainer" />
+                </div>
+                </div>
+                <label asp-for="Picture" for="studentimage"></label>
+                <input asp-for="Picture" disabled class="form-control" type="file" id="image" onchange="selectImage()" name="studentImage" placeholder="Student Image" />
                 </div>*@
-                <div class="form-group">
-                    <label asp-for="ProvinceID"></label>
-                    <select asp-items="@ViewBag.Provinces" class="form-control">
-                        <option>...انتخاب...</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label asp-for="NID"></label>
-                    <input asp-for="NID" class="form-control" name="nid" placeholder="" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="DateOfBirth"></label>
-                    <input asp-for="DateOfBirth" class="form-control" type="date" id="birthdate" name="birthdate" />
-                </div>
-                <div>
-                    <label>جنسیت</label>
-                    <div class="form-group border rounded">
-                        <div class="mt-2 mr-3">
-                            <label for="maleRadio">مذکر</label>
-                            <input type="radio" name="gender" value="male" />
-                            <label for="femaleRadio" class="pr-3">مونث</label>
-                            <input type="radio" name="gender" value="female" class="pr-3" />
+                    <div class="form-group">
+                        <label asp-for="ProvinceID"></label>
+                        <select asp-items="@ViewBag.Provinces" class="form-control">
+                            <option selected disabled>...انتخاب نمودن...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="yearsList">سال فراغت</label>
+                        <select asp-items="@ViewBag.shamsiYearsList" id="yearsList" class="form-control">
+                            <option selected disabled>...انتخاب نمودن...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="NID"></label>
+                        <input asp-for="NID" class="form-control" name="nid" placeholder="نمبر تذکره" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DateOfBirth"></label>
+                        <input asp-for="DateOfBirth" class="form-control" type="date" id="birthdate" name="birthdate" />
+                    </div>
+                    <div class="selectGender">
+                        <label>جنسیت</label>
+                        <div class="form-group border rounded">
+                            <div class="mt-2 mr-3">
+                                <div class="custom-control custom-radio">
+                                    <input id="maleRadio" name="gender" value="male" type="radio" class="custom-control-input" checked required>
+                                    <label class="custom-control-label" for="maleRadio">مذکر</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input id="femaleRadio" name="gender" value="female" type="radio" class="custom-control-input" required>
+                                    <label class="custom-control-label" for="femaleRadio">مونث</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <div class="row">
+                <div class="col">
+                    <input class="btn btn-block btn-primary" type="submit" name="submit" value="ثبت نمودن" />
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
 @section Scripts{
     <script>
-        function selectImage() {
+        //image select
+        /*function selectImage() {
             var image = document.getElementById("image");
             var imageContainer = document.getElementById("imageContainer");
 
@@ -83,6 +100,6 @@
             fileReader.onload = function () {
                 imageContainer.src = this.result;
             }
-        }
+        }*/
     </script>
 }
