@@ -6,8 +6,7 @@ namespace CMIS.Models
 {
     public class LookUp_School
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key] 
         public int SchoolID { get; set; }
         public string SchoolNameDari { get; set; }
         public string SchoolNameEnglish { get; set; }

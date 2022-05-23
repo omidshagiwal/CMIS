@@ -43,7 +43,6 @@ namespace Directorate_Certificate_App.Models.Models
 
 
         //Relationship
-        public string StudentId { get; set; }
         public StudentProfile Student_Profile { get; set; }
         public virtual LookUp_Class LookUp_Class { get; set; }
         public virtual LookUp_School LookUp_School { get; set; }

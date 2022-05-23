@@ -78,7 +78,25 @@ namespace CMIS.Controllers
              });
             return Json(new { data = DistrictList.ToList() });
         }
-
+        public IActionResult Province_Create()
+        {
+            IEnumerable<SelectListItem> prov = _db.LookUp_Province.Select(i => new SelectListItem
+            {
+                Text = i.ProvinceNamePashto,
+                Value = i.ProvinceID.ToString()
+            });
+            return View("Province_Create");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Province_Create(LookUp_Province obj)
+        {
+            var provinceId = _db.LookUp_Province.Select(x => x.ProvinceID).Max() + 1;
+            obj.ProvinceID = provinceId;
+            _db.LookUp_Province.Add(obj);
+            _db.SaveChanges();
+            return View("index");
+        }
 
     }
 }

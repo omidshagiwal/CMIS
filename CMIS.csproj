@@ -36,6 +36,8 @@
     <Compile Remove="Data\Migrations\20220512134448_biuldLookupTables.Designer.cs" />
     <Compile Remove="Migrations\20220523063645_extramig.cs" />
     <Compile Remove="Migrations\20220523063645_extramig.Designer.cs" />
+    <Compile Remove="Migrations\20220523074137_autoincre.cs" />
+    <Compile Remove="Migrations\20220523074137_autoincre.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -538,6 +540,7 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

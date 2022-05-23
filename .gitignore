@@ -365,3 +365,4 @@ FodyWeavers.xsd
 Data/Migrations/
 Migrations
 Migrations/ApplicationDbContextModelSnapshot.cs
+*.csproj
