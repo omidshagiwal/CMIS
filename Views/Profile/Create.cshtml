@@ -1,12 +1,11 @@
 ﻿@model CMIS.Models.StudentProfile;
 
 <div class="card">
-    <div class="card-header text-center bg-light">
-        <h2 class="mb-0">اضافه نمودن معلومات شاگرد</h2>
-        @ViewBag.shamsiYear
-    </div>
     <div class="card-body">
         <form asp-action="Create" method="post">
+            <div class="card-header text-center bg-light">
+                <h2 class="mb-0">معلومات متعلم</h2>
+            </div>
             <div class="row">
                 <div class="col">
                     <div class="form-group">
@@ -29,8 +28,11 @@
                         <label asp-for="GrandFatherName"></label>
                         <input asp-for="GrandFatherName" class="form-control" type="text" name="grandfathername" placeholder="اسم پدرکلان" />
                     </div>
+                    <div class="form-group">
+                        <label asp-for="NID"></label>
+                        <input asp-for="NID" class="form-control" name="nid" placeholder="نمبر تذکره" />
+                    </div>
                 </div>
-
                 <div class="col">
                     @*<div class="form-group">
                 <div class="row">
@@ -48,14 +50,14 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="yearsList">سال فراغت</label>
-                        <select asp-items="@ViewBag.shamsiYearsList" id="yearsList" class="form-control">
+                        <label asp-for="GraduationYear"></label>
+                        <select asp-for="GraduationYear" asp-items="@ViewBag.shamsiYearsList" id="yearsList" class="form-control">
                             <option selected disabled>...انتخاب نمودن...</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label asp-for="NID"></label>
-                        <input asp-for="NID" class="form-control" name="nid" placeholder="نمبر تذکره" />
+                        <label asp-for="AsasNo"></label>
+                        <input asp-for="AsasNo" class="form-control" name="asasno" placeholder="نمبر اساس" />
                     </div>
                     <div class="form-group">
                         <label asp-for="DateOfBirth"></label>
@@ -75,6 +77,35 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-header text-center bg-light">
+                <h2 class="mb-0">معلومات مکتب متعلم</h2>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        1. <label asp-for="ProvinceID"></label>
+                        <select asp-items="@ViewBag.Provinces" onchange="getDistricts()" id="ProvinceID" required class="form-control">
+                            <option selected disabled>...انتخاب نمودن...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        2. <label for="districts">ولسوالی/ناحیه</label>
+                        <select id="districts" required class="form-control">
+                            <option selected disabled>...انتخاب نمودن...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        3. <label for="schools">مکتب</label>
+                        <select  id="schools" required class="form-control">
+                            <option selected disabled>...انتخاب نمودن...</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -101,5 +132,25 @@
                 imageContainer.src = this.result;
             }
         }*/
+
+        //getDistricts
+        async function getDistricts(event) {
+            const provinces = document.getElementById("ProvinceID");
+            const selectedProvinceId = provinces.options[provinces.selectedIndex].value;
+
+            const res = await fetch("/profile/districts?provinceId=" + selectedProvinceId)
+            const data = await res.json();
+            console.log(data)
+            
+
+            //const res = await fetch("/profile/districts?provinceId=" + selectedProvinceId).then(function (response) {
+            //    return response.json();
+            //}).then(function (data) {
+            //    console.log(data);
+            //}).catch(function () {
+            //    console.log("Booo");
+            //});
+        }
+
     </script>
 }

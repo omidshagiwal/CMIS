@@ -53,6 +53,22 @@ namespace CMIS.Controllers
             }
             return View();
         }
+        public JsonResult Districts(string provinceId)
+        {
+            IEnumerable<SelectListItem> districts = _db.LookUp_District
+                .Where(x => x.ProvinceID.ToString() == provinceId)
+                .Select(x => new SelectListItem(x.DistrictID.ToString(), x.DistrictName));
+
+            return Json(districts);
+        }
+        public JsonResult Schools(string districtId)
+        {
+            IEnumerable<SelectListItem> schools = _db.LookUp_School
+                .Where(x => x.DistrictID.ToString() == districtId)
+                .Select(x => new SelectListItem(x.SchoolID.ToString(), x.SchoolNameDari));
+
+            return Json(schools);
+        }
         private string GenerateStudentId(string schoolCode, string assasNo, string graduationYear)
         {
             string idToReturn = "";
@@ -90,11 +106,11 @@ namespace CMIS.Controllers
                         zeros = "0";
                         break;
                     default:
-                        idToReturn = schoolCode + "-" + zeros + "-" + assasNo;
                         idToReturn = schoolCode + "-" + assasNo;
                         break; 
                 }
             }
+            idToReturn = schoolCode + "-" + zeros + "-" + assasNo;
             return idToReturn;
 
         }

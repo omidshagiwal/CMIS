@@ -30,10 +30,6 @@ namespace CMIS.Models
         public bool Gender { get; set; }
         [DisplayName("عکس")]
         public string Picture { get; set; }
-        //Relationship
-        [DisplayName("ولایت")]
-        public int ProvinceID { get; set; }
-        public LookUp_Province Lookup_Province { get; set; }
         [DisplayName("ملاحظات")]
         public string Remarks { get; set; }
         [Required]
@@ -42,8 +38,29 @@ namespace CMIS.Models
         [Required]
         [DisplayName("نمبر تذکره")]
         public string NID { get; set; }
+
+        //Relationship
+        [DisplayName("ولایت")]
+        public int ProvinceID { get; set; }
+        public LookUp_Province Lookup_Province { get; set; }
+
+        //unnecessary columns
         public int ClassEnrollment { get; set; }
         public string Entry_Type { get; set; }
         public bool ThreeYearMarks { get; set; }
+
+        //unmaped columns
+        [NotMapped]
+        [Required]
+        [DisplayName("نمبر اساس")]
+        public string AsasNo { get; set; }
+        [NotMapped]
+        [Required]
+        [DisplayName("سال فراغت")]
+        public string GraduationYear { get; set; }
+        [NotMapped]
+        [Required]
+        [DisplayName("نبر مکتب")]
+        public string SchoolId { get; set; }
     }
 }
