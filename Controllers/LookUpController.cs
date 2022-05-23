@@ -27,13 +27,13 @@ namespace CMIS.Controllers
 
         public IActionResult School_Create()
         {
-            IEnumerable<SelectListItem> provinceList = _db.LookUp_Province.Select(x => new SelectListItem
+            IEnumerable<SelectListItem> Schooldropdown = _db.LookUp_Province.Select(x => new SelectListItem
             {
                 Text = x.ProvinceNamePashto,
                 Value = x.ProvinceID.ToString()
             });
 
-            ViewBag.ProvinceId = provinceList;
+            ViewBag.Schooldropdown = Schooldropdown;
 
 
             //ViewBag.ProvinceId = _db.LookUp_Province.Select(p => new SelectListItem
