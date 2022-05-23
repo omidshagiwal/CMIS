@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Directorate_Certificate_App.Models.Models.Class_Sections>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ClassID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SchoolID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SectionID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Year)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClassID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SchoolID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SectionID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Year)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ClassSectionID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ClassSectionID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ClassSectionID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

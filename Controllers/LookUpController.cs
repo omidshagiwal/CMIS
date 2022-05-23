@@ -27,13 +27,12 @@ namespace CMIS.Controllers
 
         public IActionResult School_Create()
         {
-            IEnumerable<SelectListItem> Schooldropdown = _db.LookUp_Province.Select(x => new SelectListItem
+            ViewBag.Schooldropdown = _db.LookUp_Province.Select(x => new SelectListItem
             {
                 Text = x.ProvinceNamePashto,
                 Value = x.ProvinceID.ToString()
             });
 
-            ViewBag.Schooldropdown = Schooldropdown;
 
 
             //ViewBag.ProvinceId = _db.LookUp_Province.Select(p => new SelectListItem
@@ -47,25 +46,54 @@ namespace CMIS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult School_Create(LookUp_School obj)
         {
-            _db.LookUp_School.Add(obj);
-            _db.SaveChanges();
-            return View("School_Display");
-        }
-        public IActionResult School_Display(LookUp_Province lookUp_Province)
-        {
-            //LookUp_Province lookUp_province = new LookUp_Province();
-            //lookUp_province.ProvinceList = new List<SelectList>();
+            var SchoolCount = _db.LookUp_School.Where(s => s.DistrictID == obj.DistrictID).Count();
+            int SchoolID=0;
 
-            //var data = _db.LookUp_Province.ToList();
-            //lookUp_Province.ProvinceList.Add(new SelectListItem
-            //{
-            //    Text = lookUp_Province.ProvinceNamePashto,
-            //    Value = Convert.ToString(item.Id)
-            //});
+            if (SchoolCount > 0) {
+            var SchoolMaxId = _db.LookUp_School.Where(s => s.DistrictID == obj.DistrictID).Max().SchoolID+1;
+            }
+            else
+            {
+                if (obj.DistrictID > 0)
+                {
+                    string SchoolCode;
+                    var DID = obj.DistrictID.ToString();
+                    switch (DID.Length)
+                    {
+                        case 3:
+                            SchoolCode = DID + "000001";
+                            break;
+                        case 4:
+                            SchoolCode = DID + "00001";
+                            break;
 
-            IEnumerable<LookUp_School> objlist = _db.LookUp_School;
-            return View(objlist);
-        }
+                        default:
+                            SchoolCode = "0";
+                            break;
+                    }
+                    SchoolID = Convert.ToInt32(SchoolCode);
+                }
+                else
+                {
+                    return View();
+                }
+
+            }
+
+            if (SchoolID > 0)
+            {
+                obj.SchoolID = SchoolID;
+                _db.LookUp_School.Add(obj);
+                _db.SaveChanges();
+                return View("Index");
+            }
+            else
+            {
+                return View();
+
+            }
+
+        } 
 
         [HttpGet]
         public JsonResult GetDistricts(int provinceId)
