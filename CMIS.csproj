@@ -34,6 +34,8 @@
     <Compile Remove="Data\Migrations\20220512122631_Student_Subject.Designer.cs" />
     <Compile Remove="Data\Migrations\20220512134448_biuldLookupTables.cs" />
     <Compile Remove="Data\Migrations\20220512134448_biuldLookupTables.Designer.cs" />
+    <Compile Remove="Migrations\20220523063645_extramig.cs" />
+    <Compile Remove="Migrations\20220523063645_extramig.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

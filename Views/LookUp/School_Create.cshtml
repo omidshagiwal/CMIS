@@ -9,21 +9,24 @@
     <div class="col-md-4 text-center">
         <form asp-action="School_Create">
             <div class="form-group">
-                <label for="ProvinceId" class="control-label">Province</label>
-                <select id="ProvinceId" class="form-control" asp-items="@ViewBag.ProvinceId">
+                <label  for="ProvinceId" class="control-label">Province</label>
+                <select id="ProvinceId" class="form-control" asp-items="@ViewBag.Schooldropdown">
                     <option>--Select Province--</option>
                 </select>
             </div>
             <div class="form-group">
                 <label asp-for="DistrictID" class="control-label">District</label>
-                <select asp-for="DistrictID" class="form-control" ></select>
+                <select asp-for="DistrictID" class="form-control" >
+                    <option>--Select District--</option>
+                </select>
             </div>
-            @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@ 
+            @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@ @*
             <div class="form-group">
                 <label asp-for="SchoolID" class="control-label">School</label>
-                <label asp-for="SchoolID" class="form-control" />
-                <span asp-validation-for="SchoolID" class="text-danger"></span>
-            </div>
+                <select asp-for="SchoolID" class="form-control"> 
+                    <option>--Select School--</option>
+                </select>
+            </div>*@
             <div class="form-group">
                 <label asp-for="SchoolNameDari" class="control-label"></label>
                 <input asp-for="SchoolNameDari" class="form-control" />
@@ -44,7 +47,7 @@
                 <input asp-for="SchoolNamePrevious" class="form-control" />
                 <span asp-validation-for="SchoolNamePrevious" class="text-danger"></span>
                 </div>*@
-
+@*
             <div class="form-group">
                 <label asp-for="CurrentStageId" class="control-label"></label>
                 <input asp-for="CurrentStageId" class="form-control" />
@@ -59,12 +62,12 @@
                 <label asp-for="EntryUserId" class="control-label"></label>
                 <input asp-for="EntryUserId" class="form-control" />
                 <span asp-validation-for="EntryUserId" class="text-danger"></span>
-            </div>
+            </div> 
             <div class="form-group">
                 <label asp-for="EntryDate" class="control-label"></label>
                 <input asp-for="EntryDate" class="form-control" />
                 <span asp-validation-for="EntryDate" class="text-danger"></span>
-            </div>
+            </div>*@
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -98,48 +101,4 @@
         });
 
 </script>
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@* 
-
-    //            $.ajax({
-    //type: "GET",
-    //dataType: "JSON",
-    //url: "/LookUp/GetDistricts",
-    //data:{ provinceId:pId },
-    //success: function (data) {
-   $.getJSON('/LookUp/GetDistricts',{ provinceId:pId }, function(data){
-                       console.log(data)
-                       $('#DistrictID').html('');
-                        $('#DistrictID').append('<option value ="">- خواښ - </option>')
-                        $.each(data.data, function(index, row){
-                            //alert(row.value)
-                            debugger;
-                            $('#DistrictID').append('<option value="' + row.value + '">' + row.text + '</option>')
-                        });
-   
-    //    $('#DistrictID').html('');
-    //    $('#DistrictID').append('<option value ="">- خواښ - </option>')
-    //    $.each(data.data, function(index, row){
-    //        alert(row.Value)
-    //        debugger;
-    //        $('#DistrictID').append('<option value="' + row.value + '">' + row.text + '</option>')
-    //    });
-    //}
-    //}); })*@
+} 
