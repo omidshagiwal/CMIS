@@ -140,8 +140,17 @@
 
             const res = await fetch("/profile/districts?provinceId=" + selectedProvinceId)
             const data = await res.json();
-            console.log(data)
-            
+
+            const districts = document.getElementById("districts");
+            //districts.remove("");
+
+            for (const district of data) {
+                var option = document.createElement("option");
+                option.text = district.text;
+                option.value = district.value;
+                
+                districts.appendChild(option);
+            }
 
             //const res = await fetch("/profile/districts?provinceId=" + selectedProvinceId).then(function (response) {
             //    return response.json();
