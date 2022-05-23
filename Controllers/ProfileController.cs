@@ -57,7 +57,7 @@ namespace CMIS.Controllers
         {
             IEnumerable<SelectListItem> districts = _db.LookUp_District
                 .Where(x => x.ProvinceID.ToString() == provinceId)
-                .Select(x => new SelectListItem(x.DistrictID.ToString(), x.DistrictName));
+                .Select(x => new SelectListItem(x.DistrictName, x.DistrictID.ToString()));
 
             return Json(districts);
         }
