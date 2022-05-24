@@ -1,0 +1,133 @@
+﻿@model CMIS.Models.ResultDocumentRegulation
+
+<form asp-action="Create" method="post">
+    <div class="card">
+        <div class="card-body">
+            <div class="row card-header mb-3">
+                <div class="col">
+                    <h2 class="text-center">اضافه نمودن محدودیت ها در جدول نتایج</h2>
+                    <h4 class="text-center text-danger">@ViewBag.Message</h4>
+                    <h5 class="text-center">
+                        <a asp-action="Index" class="btn-link">لست محدودیت ها</a>
+                    </h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="provinces">ولایت</label>
+                        <select asp-items="@ViewBag.Provinces" onchange="getDistricts()" id="provinces" required class="form-control">
+                            <option selected disabled>...انتخاب نمودن...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="districts">ولسوالی/ناحیه</label>
+                        <select id="districts" required class="form-control" onchange="getSchools()">
+                            <option selected disabled>...انتخاب نمودن...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="SchoolID">مکتب</label>
+                        <select asp-for="SchoolID" name="SchoolID" required class="form-control">
+                            <option selected disabled>...انتخاب نمودن...</option>
+                        </select>
+                        <span asp-validation-for="SchoolID"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="Year"></label>
+                        <select asp-for="Year" asp-items="@ViewBag.shamsiYearsList" class="form-control">
+                            <option selected disabled>...انتخاب نمودن...</option>
+                        </select>
+                        <span asp-validation-for="Year"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="TotalStudentsPerYear"></label>
+                        <input asp-for="TotalStudentsPerYear" class="form-control" type="number" placeholder="تعداد شاگرد ها در سال" />
+                        <span asp-validation-for="TotalStudentsPerYear"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="StudentsPerDocument"></label>
+                        <input asp-for="StudentsPerDocument" class="form-control" type="number" placeholder="تعداد شاگرد ها در صفحه" />
+                        <span asp-validation-for="StudentsPerDocument"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <label asp-for="isVariable"></label>
+                    <div class="row">
+                        <div class="col">
+                            <label for="isVariable" class="form-group border rounded d-block p-1">
+                                <input class="mt-2 mr-1" asp-for="isVariable" type="checkbox">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <button type="submit" class="btn btn-primary btn-block">ثبت کردن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+    <script>
+
+        async function getDistricts() {
+            const provinces = document.getElementById("provinces");
+            const selectedProvinceId = provinces.options[provinces.selectedIndex].value;
+
+            const res = await fetch("/helpers/districts?provinceId=" + selectedProvinceId)
+            const data = await res.json();
+
+            const districts = document.getElementById("districts");
+            //districts.remove("");
+
+            for (const district of data) {
+                var option = document.createElement("option");
+                option.text = district.text;
+                option.value = district.value;
+
+                districts.appendChild(option);
+            }
+        }
+
+        async function getSchools() {
+            const districts = document.getElementById("districts");
+            const selectedDistrictId = districts.options[districts.selectedIndex].value;
+
+            const res = await fetch("/helpers/schools?districtId=" + selectedDistrictId)
+            const data = await res.json();
+            console.log(data);
+
+            const schools = document.getElementById("SchoolID");
+            //districts.remove("");
+
+            for (const school of data) {
+                var option = document.createElement("option");
+                option.text = school.text;
+                option.value = school.value;
+
+                schools.appendChild(option);
+            }
+        }
+
+    </script>
+}

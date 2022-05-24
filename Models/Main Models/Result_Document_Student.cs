@@ -8,9 +8,11 @@ namespace Directorate_Certificate_App.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int ResultDocucmentStudentID { get; set; }
-        public int? studentID { get; set; }
+        public int ResultDocucmentID { get; set; }
+
         public int AssasNo { get; set; }
+
+        public int? studentID { get; set; }
         public string StudentName { get; set; }
         public string FatherName { get; set; }
         public int ResultBookOrderNo { get; set; }

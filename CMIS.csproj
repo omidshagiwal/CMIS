@@ -38,6 +38,18 @@
     <Compile Remove="Migrations\20220523063645_extramig.Designer.cs" />
     <Compile Remove="Migrations\20220523074137_autoincre.cs" />
     <Compile Remove="Migrations\20220523074137_autoincre.Designer.cs" />
+    <Compile Remove="Migrations\20220524052653_changesInToResultDocument.cs" />
+    <Compile Remove="Migrations\20220524052653_changesInToResultDocument.Designer.cs" />
+    <Compile Remove="Migrations\20220524053259_changesInToResultDocument.cs" />
+    <Compile Remove="Migrations\20220524053259_changesInToResultDocument.Designer.cs" />
+    <Compile Remove="Migrations\20220524054011_removeIdFromStudentProfile.cs" />
+    <Compile Remove="Migrations\20220524054011_removeIdFromStudentProfile.Designer.cs" />
+    <Compile Remove="Migrations\20220524054131_removeIdFromStudentProfile.cs" />
+    <Compile Remove="Migrations\20220524054131_removeIdFromStudentProfile.Designer.cs" />
+    <Compile Remove="Migrations\20220524054355_changesInToResultDocument.cs" />
+    <Compile Remove="Migrations\20220524054355_changesInToResultDocument.Designer.cs" />
+    <Compile Remove="Migrations\20220524055013_temp.cs" />
+    <Compile Remove="Migrations\20220524055013_temp.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -540,7 +552,6 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

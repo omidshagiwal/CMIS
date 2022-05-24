@@ -1,0 +1,50 @@
+﻿@model IEnumerable<CMIS.Models.ResultDocumentRegulation>
+
+<div class="row">
+    <div class="col">
+        <h2 class="text-center">محدودیت ها در جدول نتایج</h2>
+        <h5 class="text-center">
+            <a asp-action="Create" class="btn-link">اضافه نمودن</a>
+        </h5>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">مکتب</th>
+                    <th scope="col">سال</th>
+                    <th scope="col">تعداد شاگرد ها در سال</th>
+                    <th scope="col">تعداد شاگرد ها در صفحه</th>
+                    <th scope="col">شاگرد ها در جدول مجهول است</th>
+                </tr>
+            </thead>
+            @if (Model.Count() > 0)
+            {
+                @foreach (var docReg in Model)
+                {
+                    <tbody>
+                        <tr>
+                            <td scope="row">@docReg.LookupSchool.SchoolNameDari</td>
+                            <td scope="row">@docReg.Year</td>
+                            <td scope="row">@docReg.TotalStudentsPerYear</td>
+                            <td scope="row">@docReg.StudentsPerDocument</td>
+                            <td scope="row">
+                                @if (@docReg.isVariable)
+                                {
+                                    <span>بلی</span>
+                                }
+                                else
+                                {
+                                    <span>نخیر</span>
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                }
+            }
+        </table>
+    </div>
+</div>
