@@ -9,8 +9,7 @@ namespace CMIS.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        //public string Id { get; set; }
-        public int sdfdID { get; set; }
+        public string Id { get; set; }
 
         [Required]
         [DisplayName("اسم")]
