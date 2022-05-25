@@ -33,6 +33,7 @@ namespace CMIS.Data
         public DbSet<StudentProfile> StudentsProfile { get; set; }
         public DbSet<ResultDocumentRegulation> ResultDocumentRegulations { get; set; }
         public DbSet<Student_Class_Info> Student_Class_Info { get; set; }
+        public DbSet<Class_Sections> Class_Sections { get; set; }
 
         //public DbSet<Result_Document_Student> Result_Document_Student { get; set; }
         //public DbSet<Student_Attendence> Student_Attendence { get; set; }
