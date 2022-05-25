@@ -13,13 +13,13 @@ namespace CMIS.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string ID { get; set; }
         [Required]
-        [DisplayName("نمبر سند")]
-        public string DocucmentCode { get; set; }
-        [Required]
-        public string Path { get; set; }
-        [Required]
         [DisplayName("سال")]
         public int Year { get; set; }
+        [Required]
+        [DisplayName("نمبر سند")]
+        public string DocucmentNumber { get; set; }
+        [Required]
+        public string Path { get; set; }
         [Required]
         public DateTime InsertedDate { get; set; }
         [Required]

@@ -50,6 +50,14 @@
     <Compile Remove="Migrations\20220524054355_changesInToResultDocument.Designer.cs" />
     <Compile Remove="Migrations\20220524055013_temp.cs" />
     <Compile Remove="Migrations\20220524055013_temp.Designer.cs" />
+    <Compile Remove="Migrations\20220525070105_addingResultDocumentAndResultDocumentStudentModelsInDbContext.cs" />
+    <Compile Remove="Migrations\20220525070105_addingResultDocumentAndResultDocumentStudentModelsInDbContext.Designer.cs" />
+    <Compile Remove="Migrations\20220525070308_removingResutlDocAndResultDocStudent.cs" />
+    <Compile Remove="Migrations\20220525070308_removingResutlDocAndResultDocStudent.Designer.cs" />
+    <Compile Remove="Migrations\20220525072509_AddingSchoolIDBack.cs" />
+    <Compile Remove="Migrations\20220525072509_AddingSchoolIDBack.Designer.cs" />
+    <Compile Remove="Migrations\20220525074900_initial.cs" />
+    <Compile Remove="Migrations\20220525074900_initial.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

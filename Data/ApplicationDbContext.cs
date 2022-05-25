@@ -32,6 +32,9 @@ namespace CMIS.Data
         //// Main Models
         public DbSet<StudentProfile> StudentsProfile { get; set; }
         public DbSet<ResultDocumentRegulation> ResultDocumentRegulations { get; set; }
+        public DbSet<ResultDocument> ResultDocuments { get; set; }
+        public DbSet<ResultDocumentStudent> ResultDocumentStudents { get; set; }
+
         public DbSet<Student_Class_Info> Student_Class_Info { get; set; }
         public DbSet<Class_Sections> Class_Sections { get; set; }
 
@@ -46,7 +49,11 @@ namespace CMIS.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Student_Class_Info>().HasKey(p => new { p.StudentID, p.ClassID, p.GraduationYear });
+            modelBuilder.Entity<Student_Class_Info>()
+                .HasKey(p => new { p.StudentID, p.ClassID, p.GraduationYear });
+
+            modelBuilder.Entity<ResultDocumentStudent>()
+                .HasKey(x => new { x.ResultDocucmentID, x.AsasNumber });
         }
     }
 }

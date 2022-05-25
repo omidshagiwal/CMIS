@@ -89,6 +89,10 @@
     }
 
     <script>
+        var defaultOption = document.createElement("option");
+        defaultOption.text = "...انتخاب نمودن...";
+        defaultOption.disabled = true;
+        defaultOption.setAttribute("selected","true");
 
         async function getDistricts() {
             const provinces = document.getElementById("provinces");
@@ -98,7 +102,8 @@
             const data = await res.json();
 
             const districts = document.getElementById("districts");
-            //districts.remove("");
+            districts.innerHTML = "";
+            districts.appendChild(defaultOption);
 
             for (const district of data) {
                 var option = document.createElement("option");
@@ -115,10 +120,10 @@
 
             const res = await fetch("/helpers/schools?districtId=" + selectedDistrictId)
             const data = await res.json();
-            console.log(data);
 
             const schools = document.getElementById("SchoolID");
-            //districts.remove("");
+            schools.innerHTML = "";
+            schools.appendChild(defaultOption);
 
             for (const school of data) {
                 var option = document.createElement("option");
