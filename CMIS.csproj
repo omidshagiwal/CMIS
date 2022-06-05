@@ -58,6 +58,10 @@
     <Compile Remove="Migrations\20220525072509_AddingSchoolIDBack.Designer.cs" />
     <Compile Remove="Migrations\20220525074900_initial.cs" />
     <Compile Remove="Migrations\20220525074900_initial.Designer.cs" />
+    <Compile Remove="Migrations\20220604102306_changeDOBType.cs" />
+    <Compile Remove="Migrations\20220604102306_changeDOBType.Designer.cs" />
+    <Compile Remove="Migrations\20220604103204_dd.cs" />
+    <Compile Remove="Migrations\20220604103204_dd.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

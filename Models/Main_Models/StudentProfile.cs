@@ -1,4 +1,5 @@
 ﻿using CMIS.Models;
+using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -11,57 +12,60 @@ namespace CMIS.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "اسم ضروری میباشد.")]
         [DisplayName("اسم")]
         public string Name { get; set; }
-        [Required]
+        [Required(ErrorMessage = "اسم پدر ضروری میباشد.")]
         [DisplayName("اسم پدر")]
         public string FatherName { get; set; }
-        [Required]
+        [Required(ErrorMessage = "اسم به انگلیسی ضروری میباشد.")]
         [DisplayName("اسم به انگلیسی")]
         public string NameEnglish { get; set; }
-        [Required]
+        [Required(ErrorMessage = "اسم پدر ضروری میباشد.")]
         [DisplayName("اسم پدر به انگلیسی")]
         public string FatherNameEnglish { get; set; }
-        [Required]
+        [Required(ErrorMessage = "تاریخ تولد ضروری میباشد.")]
         [DisplayName("تاریخ تولد")]
-        public long DateOfBirth { get; set; }
+        //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime DateOfBirth { get; set; }
         [Required]
         [DisplayName("جنسیت")]
-        public bool Gender { get; set; }
+        [DefaultValue(1)]
+        public int Gender { get; set; }
         [DisplayName("عکس")]
         public string Picture { get; set; }
         [DisplayName("ملاحظات")]
         public string Remarks { get; set; }
-        [Required]
+        [Required(ErrorMessage = "اسم پدر کلان ضروری میباشد.")]
         [DisplayName("اسم پدرکلان")]
         public string GrandFatherName { get; set; }
-        [Required]
+        [Required(ErrorMessage = "نمبر تذکره ضروری میباشد.")]
         [DisplayName("نمبر تذکره")]
         public string NID { get; set; }
 
         //Relationship
+        [Required(ErrorMessage = "ولایت ضروری میباشد.")]
         [DisplayName("ولایت")]
         public int ProvinceID { get; set; }
+        [ForeignKey("ProvinceID")]
         public LookUp_Province Lookup_Province { get; set; }
 
         //unnecessary columns
         public int ClassEnrollment { get; set; }
-        public string Entry_Type { get; set; }
+        [DefaultValue("pro")]
+        public string EntryType { get; set; }
+        [DefaultValue(true)]
         public bool ThreeYearMarks { get; set; }
 
         //unmaped columns
         [NotMapped]
-        [Required]
         [DisplayName("نمبر اساس")]
         public string AsasNo { get; set; }
         [NotMapped]
-        [Required]
         [DisplayName("سال فراغت")]
         public string GraduationYear { get; set; }
         [NotMapped]
-        [Required]
-        [DisplayName("نبر مکتب")]
-        public string SchoolId { get; set; }
+        [DisplayName("مکتب")]
+        public int SchoolId { get; set; }
     }
 }

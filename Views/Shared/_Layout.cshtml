@@ -465,9 +465,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] Arm Shopping</title>
+    <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
     <!-- template rtl version -->
     <link rel="stylesheet" href="~/Template/dist/css/bootstrap-rtl.min.css">
     <!-- template rtl version -->
@@ -484,13 +483,15 @@
     <link rel="stylesheet" href="~/Template/dist/css/bootstrap-rtl.min.css">
     <!-- template rtl version -->
     <link rel="stylesheet" href="~/Template/dist/css/custom-style.css">
-    <script src="https://kit.fontawesome.com/32b0ef47cf.js" crossorigin="anonymous"></script>
+    <link href="~/lib/select2/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/lib/PersianDatePicker/persian.datepicker.css" rel="stylesheet" />
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Arm Shopping</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -499,19 +500,25 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Item" asp-action="Index">Items</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="LookUp" asp-action="index">Create</a>
-                        </li> 
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Class_Section" asp-action="index">Schools</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="ResultDocumentRegulation" asp-action="index">ResDocRegulations</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="ResultDocumentRegulation" asp-action="create">AddResDocRegulation</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="ResultDocument" asp-action="index">ResDocs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="ResultDocument" asp-action="create">AddResDoc</a>
                         </li>
                     </ul>
                 </div>
@@ -532,6 +539,10 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/select2/select2.min.js"></script>
+    <script src="https://kit.fontawesome.com/32b0ef47cf.js" crossorigin="anonymous"></script>
+    <script src="~/lib/PersianDatePicker/persian-date.js"></script>
+    <script src="~/lib/PersianDatePicker/persian-datepicker.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

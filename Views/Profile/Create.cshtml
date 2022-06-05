@@ -3,109 +3,99 @@
 <div class="card">
     <div class="card-body">
         <form asp-action="Create" method="post">
-            <div class="card-header text-center bg-light">
-                <h2 class="mb-0">معلومات متعلم</h2>
-            </div>
+            <h5 class="text-danger text-center">@ViewBag.ErrorMessage</h5>    
             <div class="row">
                 <div class="col">
                     <div class="form-group">
                         <label asp-for="Name"></label>
-                        <input asp-for="Name" class="form-control" type="text" name="name" placeholder="اسم" />
+                        <input asp-for="Name" class="form-control" placeholder="اسم" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="NameEnglish"></label>
-                        <input asp-for="NameEnglish" class="form-control" type="text" name="nameenglish" placeholder="اسم به انگلیسی" />
+                        <input asp-for="NameEnglish" class="form-control" placeholder="اسم به انگلیسی" />
+                        <span asp-validation-for="NameEnglish" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="FatherName"></label>
-                        <input asp-for="FatherName" class="form-control" type="text" name="fathername" placeholder="اسم پدر" />
+                        <input asp-for="FatherName" class="form-control" placeholder="اسم پدر" />
+                        <span asp-validation-for="FatherName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="FatherNameEnglish"></label>
-                        <input asp-for="FatherNameEnglish" class="form-control" type="text" name="fathernameenglish" placeholder="اسم پدر به انگلیسی" />
+                        <input asp-for="FatherNameEnglish" class="form-control" placeholder="اسم پدر به انگلیسی" />
+                        <span asp-validation-for="FatherNameEnglish" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="GrandFatherName"></label>
-                        <input asp-for="GrandFatherName" class="form-control" type="text" name="grandfathername" placeholder="اسم پدرکلان" />
+                        <input asp-for="GrandFatherName" class="form-control" placeholder="اسم پدرکلان" />
+                        <span asp-validation-for="GrandFatherName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="NID"></label>
-                        <input asp-for="NID" class="form-control" name="nid" placeholder="نمبر تذکره" />
+                        <input asp-for="NID" class="form-control" type="number" placeholder="نمبر تذکره" />
+                        <span asp-validation-for="NID" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col">
                     @*<div class="form-group">
-                <div class="row">
-                <div class="col-4 mx-auto">
-                <img class="card-img rounded" src="" alt="" id="imageContainer" />
-                </div>
-                </div>
-                <label asp-for="Picture" for="studentimage"></label>
-                <input asp-for="Picture" disabled class="form-control" type="file" id="image" onchange="selectImage()" name="studentImage" placeholder="Student Image" />
-                </div>*@
+                        <div class="row">
+                        <div class="col-4 mx-auto">
+                        <img class="card-img rounded" src="" alt="" id="imageContainer" />
+                        </div>
+                        </div>
+                        <label asp-for="Picture" for="studentimage"></label>
+                        <input asp-for="Picture" disabled class="form-control" type="file" id="image" onchange="selectImage()" name="studentImage" placeholder="Student Image" />
+                        </div>*@
                     <div class="form-group">
-                        <label asp-for="ProvinceID"></label>
-                        <select asp-items="@ViewBag.Provinces" class="form-control">
-                            <option selected disabled>...انتخاب نمودن...</option>
-                        </select>
+                        <label for="school">مکتب</label>
+                        <input id="school" readonly class="form-control" value="@ViewBag.SchoolName" />
                     </div>
                     <div class="form-group">
                         <label asp-for="GraduationYear"></label>
-                        <select asp-for="GraduationYear" asp-items="@ViewBag.shamsiYearsList" id="yearsList" class="form-control">
-                            <option selected disabled>...انتخاب نمودن...</option>
-                        </select>
+                        <input asp-for="GraduationYear" readonly class="form-control" />
                     </div>
                     <div class="form-group">
                         <label asp-for="AsasNo"></label>
-                        <input asp-for="AsasNo" class="form-control" name="asasno" placeholder="نمبر اساس" />
+                        <input asp-for="AsasNo" readonly class="form-control" placeholder="نمبر اساس" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ProvinceID"></label>
+                        <select asp-items="@ViewBag.Provinces" asp-for="ProvinceID" class="form-control select-2">
+                            <option selected disabled>...انتخاب نمودن...</option>
+                        </select>
+                        <span asp-validation-for="ProvinceID" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="DateOfBirth"></label>
-                        <input asp-for="DateOfBirth" class="form-control" type="date" id="birthdate" name="birthdate" />
+                        <input asp-for="DateOfBirth" type="text" value="" class="form-control text-center" autocomplete="off" placeholder="روز/ماه/سال" />
+                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                     </div>
                     <div class="selectGender">
                         <label>جنسیت</label>
-                        <div class="form-group border rounded">
-                            <div class="mt-2 mr-3">
-                                <div class="custom-control custom-radio">
-                                    <input id="maleRadio" name="gender" value="male" type="radio" class="custom-control-input" checked required>
-                                    <label class="custom-control-label" for="maleRadio">مذکر</label>
+                        <div class="form-group border rounded pt-1 pb-1">
+                            <div class="row">
+                                <div class="col-2">
+                                    <div class="custom-control custom-radio">
+                                        <input asp-for="Gender" id="male" value="1" type="radio" class="custom-control-input" checked>
+                                        <label class="custom-control-label pr-4" for="male">مذکر</label>
+                                    </div>
                                 </div>
-                                <div class="custom-control custom-radio">
-                                    <input id="femaleRadio" name="gender" value="female" type="radio" class="custom-control-input" required>
-                                    <label class="custom-control-label" for="femaleRadio">مونث</label>
+                                <div class="col-2">
+                                    <div class="custom-control custom-radio">
+                                        <input asp-for="Gender" id="female" value="0" type="radio" class="custom-control-input">
+                                        <label class="custom-control-label pr-4" for="female">مونث</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="card-header text-center bg-light">
-                <h2 class="mb-0">معلومات مکتب متعلم</h2>
-            </div>
-            <div class="row">
-                <div class="col">
+                <div class="col-12">
                     <div class="form-group">
-                        1. <label asp-for="ProvinceID"></label>
-                        <select asp-items="@ViewBag.Provinces" onchange="getDistricts()" id="ProvinceID" required class="form-control">
-                            <option selected disabled>...انتخاب نمودن...</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-group">
-                        2. <label for="districts">ولسوالی/ناحیه</label>
-                        <select id="districts" required class="form-control">
-                            <option selected disabled>...انتخاب نمودن...</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-group">
-                        3. <label for="schools">مکتب</label>
-                        <select  id="schools" required class="form-control">
-                            <option selected disabled>...انتخاب نمودن...</option>
-                        </select>
+                        <label asp-for="Remarks"></label>
+                        <textarea asp-for="Remarks" class="form-control" placeholder="ملاحظات" rows="4" ></textarea>
+                        <span asp-validation-for="Remarks"></span>
                     </div>
                 </div>
             </div>
@@ -119,8 +109,62 @@
 </div>
 
 @section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
     <script>
-        //image select
+
+        $(document).ready(function () {
+            $('.select-2').select2();
+            $("#DateOfBirth").pDatepicker({
+                initialValue: false,
+                observer: true,
+                format: 'YYYY/MM/DD',
+                calendar: {
+                    persian: {
+                        locale: 'en'
+                    }
+                },
+                timePicker: {
+                    enabled: false,
+                },
+                autoClose: true
+            });
+        });
+
+
+
+            //$("#DateOfBirth").dateTimePickers({
+            //    months: ["حمل", "ثور", "جوزا", "سرطان", "اسد", "سنبله", "میزان", "عقرب", "قوس", "جدی", "دلوه", "حوت"],
+            //    dowTitle: ["شنبه", "یکشنبه", "دوشنبه", "سه شنبه", "چهارشنبه", "پنج شنبه", "جمعه"],
+            //    shortDowTitle: ["ش", "ی", "د", "س", "چ", "پ", "ج"],
+            //    showGregorianDate: !1,
+            //    persianNumbers: !0,
+            //    formatDate: "YYYY/MM/DD",
+            //    selectedBefore: !1,
+            //    selectedDate: null,
+            //    startDate: null,
+            //    endDate: null,
+            //    prevArrow: '<i class="fa fa-arrow-left"></i>',
+            //    nextArrow: '<i class="fa fa-arrow-right"></i>',
+            //    theme: 'default',
+            //    alwaysShow: !1,
+            //    selectableYears: null,
+            //    selectableMonths: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            //    cellWidth: 35, // by px
+            //    cellHeight: 35, // by px
+            //    fontSize: 16, // by px
+            //    isRTL: !1,
+            //    calendarPosition: {
+            //        x: 0,
+            //        y: 0,
+            //    },
+            //    onShow: function () { },
+            //    onHide: function () { },
+            //    onSelect: function () { },
+            //    onRender: function () { }
+            //});
+            //image select
         /*function selectImage() {
             var image = document.getElementById("image");
             var imageContainer = document.getElementById("imageContainer");
@@ -132,34 +176,5 @@
                 imageContainer.src = this.result;
             }
         }*/
-
-        //getDistricts
-        async function getDistricts(event) {
-            const provinces = document.getElementById("ProvinceID");
-            const selectedProvinceId = provinces.options[provinces.selectedIndex].value;
-
-            const res = await fetch("/profile/districts?provinceId=" + selectedProvinceId)
-            const data = await res.json();
-
-            const districts = document.getElementById("districts");
-            //districts.remove("");
-
-            for (const district of data) {
-                var option = document.createElement("option");
-                option.text = district.text;
-                option.value = district.value;
-                
-                districts.appendChild(option);
-            }
-
-            //const res = await fetch("/profile/districts?provinceId=" + selectedProvinceId).then(function (response) {
-            //    return response.json();
-            //}).then(function (data) {
-            //    console.log(data);
-            //}).catch(function () {
-            //    console.log("Booo");
-            //});
-        }
-
     </script>
 }

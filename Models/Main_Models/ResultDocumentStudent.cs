@@ -10,9 +10,9 @@ namespace CMIS.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Required]
-        public string ResultDocucmentID { get; set; }
+        public string ResultDocumentID { get; set; }
 
-        [ForeignKey("ResultDocucmentID")]
+        [ForeignKey("ResultDocumentID")]
         public ResultDocument ResultDocument{ get; set; }
 
         //Primary Key

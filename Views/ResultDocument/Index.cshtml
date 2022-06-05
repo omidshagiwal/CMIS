@@ -1,6 +1,359 @@
-﻿
+﻿@model CMIS.Models.ResultDocument
+
 <div class="row">
     <div class="col">
-        <h1 class="text-center">لست اسناد ها</h1>
+        <div class="form-group">
+            <label for="provinces">ولایت</label> <br />
+            <select asp-items="@ViewBag.Provinces" onchange="getDistricts()" id="provinces" class="select-2 form-control">
+                <option selected disabled>...انتخاب نمودن...</option>
+            </select>
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <label for="districts">ولسوالی/ناحیه</label> <br />
+            <select id="districts" class="select-2 form-control" onchange="getSchools();">
+                <option selected disabled>...انتخاب نمودن...</option>
+            </select>
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <label asp-for="SchoolID"></label> <br />
+            <select asp-for="SchoolID" onchange="resetSections();" class="select-2 form-control">
+                <option selected disabled>...انتخاب نمودن...</option>
+            </select>
+            <span asp-validation-for="SchoolID"></span>
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <label for="sections">شعبه</label> <br />
+            <select id="sections" class="select-2 form-control" onchange="resetYears();">
+                <option selected disabled>...انتخاب نمودن...</option>
+            </select>
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <label asp-for="Year"></label> <br />
+            <select asp-for="Year" class="select-2 form-control" onchange="getResultDocuments();">
+                <option selected disabled>...انتخاب نمودن...</option>
+            </select>
+            <span asp-validation-for="Year"></span>
+        </div>
     </div>
 </div>
+
+<div class="row" id="documentsList"></div>
+    <div class="modal fade"
+         id="studentsList"
+         data-backdrop="static"
+         data-keyboard="false"
+         tabindex="-1"
+         aria-labelledby="studentsList"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <button type="button"
+                            class="close float-right"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                            onclick="closeModal()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5 class="modal-title" id="studentsList">لست شاگرد ها</h5>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">نمبر اساس</th>
+                                <th scope="col">نمبر ترتیب</th>
+                                <th scope="col">اسم</th>
+                                <th scope="col">ولد</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @*<tr>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                                <td scope="row"></td>
+                            </tr>*@
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@section Scripts{
+    <script>
+        var years = null;
+        var sections = null;
+
+        $(document).ready(function () {
+            $('.select-2').select2();
+            getYears();
+            getSections();
+        });
+
+        async function getDistricts() {
+            resetSchools();
+            resetSections();
+            resetYears();
+
+            const provinces = document.getElementById("provinces");
+            const selectedProvinceId = provinces.options[provinces.selectedIndex].value;
+
+            const res = await fetch("/helpers/districts?provinceId=" + selectedProvinceId)
+            const data = await res.json();
+
+            const districts = document.getElementById("districts");
+            districts.innerHTML = "";
+            districts.appendChild(await getDefaultOption());
+
+            for (const district of data) {
+                var option = document.createElement("option");
+                option.text = district.text;
+                option.value = district.value;
+                districts.appendChild(option);
+            }
+        }
+
+        async function getSchools() {
+            resetSections();
+            resetYears();
+
+            const districts = document.getElementById("districts");
+            const selectedDistrictId = districts.options[districts.selectedIndex].value;
+
+            const res = await fetch("/helpers/schools?districtId=" + selectedDistrictId)
+            const data = await res.json();
+
+            const schools = document.getElementById("SchoolID");
+            schools.innerHTML = "";
+            schools.appendChild(await getDefaultOption());
+
+            for (const school of data) {
+                var option = document.createElement("option");
+                option.text = school.text;
+                option.value = school.value;
+
+                schools.appendChild(option);
+            }
+        }
+
+        async function getSections() {
+            const res = await fetch("/helpers/sections")
+            sections = await res.json();
+
+            const sectionsSelect = document.getElementById("sections");
+            sectionsSelect.innerHTML = "";
+            sectionsSelect.appendChild(await getDefaultOption());
+
+            for (const section of sections) {
+                var option = document.createElement("option");
+                option.text = section.text;
+                option.value = section.value;
+                sectionsSelect.appendChild(option);
+            }
+        }
+
+        async function getYears() {
+            const res = await fetch("/helpers/years")
+            years = await res.json();
+
+            const yearsSelect = document.getElementById("Year");
+            yearsSelect.innerHTML = "";
+            yearsSelect.appendChild(await getDefaultOption());
+
+            for (const year of years) {
+                var option = document.createElement("option");
+                option.text = year.text;
+                option.value = year.value;
+                yearsSelect.appendChild(option);
+            }
+        }
+
+        async function getResultDocuments() {
+            const schools = document.getElementById("SchoolID");
+            const schoolId = schools.options[schools.selectedIndex].value;
+
+            const sectionsElement = document.getElementById("sections");
+            const sectionId = sectionsElement.options[sectionsElement.selectedIndex].value;
+
+            const yearsElement = document.getElementById("Year");
+            const year = yearsElement.options[yearsElement.selectedIndex].value;
+
+            const documentsList = document.getElementById('documentsList');
+            documentsList.innerHTML = "";
+
+            const url = `/ResultDocument/ListDocumentsJson?schoolId=${schoolId}&sectionId=${sectionId}&year=${year}`;
+            const res = await fetch(url);
+            const data = await res.json();
+
+            if (data == null || data.length <= 0) {
+                const emptyMessage = document.createElement('h4');
+                emptyMessage.innerHTML = 'معلومات موجود نیست.';
+                emptyMessage.className = 'text-center text-danger';
+
+                const div = document.createElement('div');
+                div.className = 'col-12 text-center';
+                div.appendChild(emptyMessage);
+
+                documentsList.appendChild(div);
+            } else {
+                for (var i = 0; i < data.length; i++) {
+                    const resDoc = data[i];
+
+                    resDoc.path = `/resultdocuments/${resDoc.provinceName}/${resDoc.districtId}/${resDoc.schoolId}/${resDoc.year}/${resDoc.path}`;
+
+                    var item = getDocItem(resDoc.id, resDoc.studentsCount);
+
+                    const date = new Date(resDoc.insertedDate)
+                    item.getElementsByClassName('entryDate')[0].innerHTML = date.getFullYear()+ '/' + date.getMonth() + '/' + date.getDay();
+                    item.getElementsByClassName('tableNumber')[0].innerHTML = `کتاب#${resDoc.tableNumber}`;
+
+                    documentsList.appendChild(item);
+                }
+            }
+        }
+
+        async function getStudents(documentId) {
+            const url = "/ResultDocument/ListStudentsJson?documentId=" + documentId;
+            const res = await fetch(url);
+            const data = await res.json();
+            if (data == null || data.lenght <= 0) {
+                console.log(data);
+            } else {
+                const backdrop = document.createElement('div');
+                backdrop.className = 'modal-backdrop fade show';
+                document.getElementsByTagName('body')[0].appendChild(backdrop);
+
+                const modal = document.getElementById('studentsList');
+                modal.className = "modal fade show";
+                modal.style = 'display: block';
+
+                const modalBody = modal.getElementsByClassName('modal-body')[0];
+                modalBody.getElementsByTagName('tbody')[0].innerHTML = "";
+
+                for (var i = 0; i < data.length; i++) {
+                    var student = data[i];
+                    const tr = document.createElement('tr');
+
+                    const asasNumber = document.createElement('td');
+                    asasNumber.setAttribute('scope', 'row');
+                    asasNumber.innerHTML = student.asasNumber;
+
+                    const orderNumber = document.createElement('td');
+                    orderNumber.setAttribute('scope', 'row');
+                    orderNumber.innerHTML = student.studentOrderNumber;
+
+                    const name = document.createElement('td');
+                    name.setAttribute('scope', 'row');
+                    name.innerHTML = student.studentName;
+
+                    const fatherName = document.createElement('td');
+                    fatherName.setAttribute('scope', 'row');
+                    fatherName.innerHTML = student.fatherName;
+
+                    const addProfile = document.createElement('td');
+                    addProfile.setAttribute('scope', 'row');
+                    addProfile.innerHTML = `<a href="/Profile/Create/${student.studentID}" class="btn btn-primary">کامل سازی</a>`;
+
+                    console.log(student);
+
+                    tr.appendChild(orderNumber);
+                    tr.appendChild(asasNumber);
+                    tr.appendChild(name);
+                    tr.appendChild(fatherName);
+                    tr.appendChild(addProfile);
+
+                    modalBody.getElementsByTagName('tbody')[0].appendChild(tr);
+                }
+            }
+        }
+
+        async function resetSchools() {
+            const schools = document.getElementById("SchoolID");
+            schools.innerHTML = "";
+            schools.appendChild(await getDefaultOption());
+        }
+
+        function resetYears() {
+            const yearsSelect = document.getElementById("Year");
+            yearsSelect.innerHTML = "";
+            yearsSelect.appendChild(getDefaultOption());
+
+            for (const year of years) {
+                var option = document.createElement("option");
+                option.text = year.text;
+                option.value = year.value;
+                yearsSelect.appendChild(option);
+            }
+        }
+
+        function resetSections() {
+            const sectionsSelect = document.getElementById("sections");
+            sectionsSelect.innerHTML = "";
+            sectionsSelect.appendChild(getDefaultOption());
+
+            for (const section of sections) {
+                var option = document.createElement("option");
+                option.text = section.text;
+                option.value = section.value;
+                sectionsSelect.appendChild(option);
+            }
+        }
+
+        function getDefaultOption() {
+            var defaultOption = document.createElement("option");
+            defaultOption.text = "...انتخاب نمودن...";
+            defaultOption.disabled = true;
+            defaultOption.setAttribute("selected", "true");
+            return defaultOption;
+        }
+
+        function getDocItem(documentId, numberOfStudents = 0) {
+            const item = `
+            <div class="col-3">
+                <div class="card bg-secondary-gradient">
+                    <div class="card-body">
+                        <div class="row pb-1">
+                            <div class="col">
+                                <span class="tableNumber float-right"></span>
+                            </div>
+                            <div class="col">
+                                <span class="entryDate float-left"></span>
+                            </div>
+                            <div class="col-12 mt-2">
+                                <button class="btn btn-primary btn-block btn-list-students" onclick="getStudents('${documentId}')" type="button">
+                                    <i class="fas fa-eye"></i>
+                                    <span>لست شاگردان</span>
+                                    <span class="badge badge-pill badge-light">${numberOfStudents}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`
+
+            const div = document.createElement('div');
+            div.innerHTML = item.trim();
+            return div.firstChild;
+        }
+
+        function closeModal() {
+            document.getElementsByClassName('modal-backdrop')[0].remove();
+            const modal = document.getElementById('studentsList');
+            modal.className = "modal fade";
+            modal.style = 'display: none';
+        }
+
+    </script>
+}

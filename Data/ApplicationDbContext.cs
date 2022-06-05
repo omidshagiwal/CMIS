@@ -53,7 +53,7 @@ namespace CMIS.Data
                 .HasKey(p => new { p.StudentID, p.ClassID, p.GraduationYear });
 
             modelBuilder.Entity<ResultDocumentStudent>()
-                .HasKey(x => new { x.ResultDocucmentID, x.AsasNumber });
+                .HasKey(x => new { x.ResultDocumentID, x.AsasNumber });
         }
     }
 }

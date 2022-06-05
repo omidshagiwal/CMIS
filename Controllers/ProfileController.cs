@@ -1,7 +1,9 @@
 ﻿using CMIS.Data;
 using CMIS.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,107 +14,103 @@ namespace CMIS.Controllers
     public class ProfileController : Controller
     {
         private readonly ApplicationDbContext _db;
-        public ProfileController(ApplicationDbContext db)
+        private readonly HelpersController helpers;
+        public ProfileController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
         {
             _db = db;
+            helpers = new HelpersController(db, webHostEnvironment);
         }
         public IActionResult Index()
         {
             return View();
         }
-        public IActionResult Create()
+        public IActionResult Create(string id)
         {
-            IEnumerable<SelectListItem> provinces = _db.LookUp_Province.Select(x => new SelectListItem
+            ResultDocumentStudent student = null;
+            try
             {
-                Value = x.ProvinceID.ToString(),
-                Text = x.ProvinceNameDari
-            });
+                student = _db.ResultDocumentStudents
+                    .Include(a => a.ResultDocument)
+                    .Include(b => b.ResultDocument.LookupSchool).SingleOrDefault(x => x.StudentID == id);
 
-            //621 years
-            int shamsiYear = DateTime.Now.Year - 621;
-            List<SelectListItem> shamsiYearsList = new List<SelectListItem>();
-            for (int a = 0; a < 100; a++)
+                if (student == null)
+                {
+                    ViewBag.ErrorMessage = "معلومات جدول شاگرد موجود نیست.";
+                    return NotFound();
+                }
+            }
+            catch (Exception e)
             {
-                shamsiYearsList.Add(new SelectListItem(
-                    (shamsiYear - a).ToString(),
-                    (shamsiYear - a).ToString()
-                ));
+                ViewBag.ErrorMessage = "سرور دچار مشکل شد.";
+                return NotFound();
             }
 
-            ViewBag.shamsiYearsList = shamsiYearsList;
-            ViewBag.Provinces = provinces;
-            return View();
+            StudentProfile studentProfile = new StudentProfile();
+            studentProfile.Id = student.StudentID;
+            studentProfile.Name = student.StudentName;
+            studentProfile.FatherName = student.FatherName;
+            studentProfile.ClassEnrollment = student.StudentOrderNumber;
+            studentProfile.GraduationYear = student.ResultDocument.Year + "";
+
+            ViewBag.SchoolName = student.ResultDocument.LookupSchool.SchoolNameDari;
+            ViewBag.Provinces = helpers.getProvinces();
+
+            return View(studentProfile);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(StudentProfile studentProfile)
         {
-            if(ModelState.IsValid)
+            ResultDocumentStudent student = null;
+            try
             {
+                student = _db.ResultDocumentStudents
+                    .Include(a => a.ResultDocument)
+                    .Include(b => b.ResultDocument.LookupSchool)
+                    .SingleOrDefault(x => x.StudentID == studentProfile.Id);
 
-            }
-            return View();
-        }
-        public JsonResult Districts(string provinceId)
-        {
-            IEnumerable<SelectListItem> districts = _db.LookUp_District
-                .Where(x => x.ProvinceID.ToString() == provinceId)
-                .Select(x => new SelectListItem(x.DistrictName, x.DistrictID.ToString()));
-
-            return Json(districts);
-        }
-        public JsonResult Schools(string districtId)
-        {
-            IEnumerable<SelectListItem> schools = _db.LookUp_School
-                .Where(x => x.DistrictID.ToString() == districtId)
-                .Select(x => new SelectListItem(x.SchoolID.ToString(), x.SchoolNameDari));
-
-            return Json(schools);
-        }
-        private string GenerateStudentId(string schoolCode, string assasNo, string graduationYear)
-        {
-            string idToReturn = "";
-            int GaraguationYear = Convert.ToInt32(graduationYear) - 2;
-            string zeros = "";
-            if (GaraguationYear > 0 && schoolCode.Length > 0)
-            {
-                switch (assasNo.Length)
+                if (student == null)
                 {
-                    case 1:
-                        zeros = "000000000";
-                        break;
-                    case 2:
-                        zeros = "00000000"; 
-                        break;
-                    case 3:
-                        zeros = "0000000";
-                        break;
-                    case 4:
-                        zeros = "000000";
-                        break;
-                    case 5:
-                        zeros = "00000";
-                        break;
-                    case 6:
-                        zeros = "0000";
-                        break;
-                    case 7:
-                        zeros = "000";
-                        break;
-                    case 8:
-                        zeros = "00";
-                        break;
-                    case 9:
-                        zeros = "0";
-                        break;
-                    default:
-                        idToReturn = schoolCode + "-" + assasNo;
-                        break; 
+                    ViewBag.ErrorMessage = "معلومات جدول شاگرد موجود نیست.";
+                    return RedirectToAction("Create", student.StudentID);
+                } 
+                else
+                {
+                    var stdProfile = _db.StudentsProfile.Where(x => x.Id == studentProfile.Id).Count();
+                    if (stdProfile != 0)
+                    {
+                        ViewBag.ErrorMessage = "معلومات جدول شاگرد موجود است.";
+                        //redirect to marks page
+                        return RedirectToAction("Index");
+                    }
                 }
-            }
-            idToReturn = schoolCode + "-" + zeros + "-" + assasNo;
-            return idToReturn;
 
+            }
+            catch (Exception e)
+            {
+                ViewBag.ErrorMessage = "سرور دچار مشکل شد.";
+                return RedirectToAction("Create", student.StudentID);
+            }
+
+            studentProfile.GraduationYear = student.ResultDocument.Year + "";
+            studentProfile.AsasNo = student.AsasNumber;
+            DateTime DOB = DateTime.Parse(studentProfile.DateOfBirth + "");
+            studentProfile.DateOfBirth = DOB;
+            studentProfile.EntryType = "pro";
+            studentProfile.ThreeYearMarks = true;
+
+            if (ModelState.IsValid)
+            {
+                _db.StudentsProfile.Add(studentProfile);
+                _db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "معلومات کامل نیست.";
+                return RedirectToAction("Create", student.StudentID);
+            }
         }
     }
 }

@@ -29,17 +29,17 @@
 
 	$.validator.addMethod( "maxWords", function( value, element, params ) {
 		return this.optional( element ) || stripHtml( value ).match( /\b\w+\b/g ).length <= params;
-	}, $.validator.format( "Please enter {0} words or less." ) );
+	}, $.validator.format( "لطفا از {0} کمتر وارد کنید." ) );
 
 	$.validator.addMethod( "minWords", function( value, element, params ) {
 		return this.optional( element ) || stripHtml( value ).match( /\b\w+\b/g ).length >= params;
-	}, $.validator.format( "Please enter at least {0} words." ) );
+	}, $.validator.format( "لطفا حداقل {0} وارد کنید." ) );
 
 	$.validator.addMethod( "rangeWords", function( value, element, params ) {
 		var valueStripped = stripHtml( value ),
 			regex = /\b\w+\b/g;
 		return this.optional( element ) || valueStripped.match( regex ).length >= params[ 0 ] && valueStripped.match( regex ).length <= params[ 1 ];
-	}, $.validator.format( "Please enter between {0} and {1} words." ) );
+	}, $.validator.format( "لطفا بین {0} و {1} وارد کنید." ) );
 
 }() );
 
@@ -83,11 +83,11 @@ $.validator.addMethod( "accept", function( value, element, param ) {
 	// Either return true because we've validated each file, or because the
 	// browser does not support element.files and the FileList feature
 	return true;
-}, $.validator.format( "Please enter a value with a valid mimetype." ) );
+}, $.validator.format( "لطفا با تایپ مناسب وارد کنید." ) );
 
 $.validator.addMethod( "alphanumeric", function( value, element ) {
 	return this.optional( element ) || /^\w+$/i.test( value );
-}, "Letters, numbers, and underscores only please" );
+}, "تنها حرف نمبر و اندرسکور." );
 
 /*
  * Dutch bank account numbers (not 'giro' numbers) have 9 digits
@@ -682,7 +682,7 @@ $.validator.addMethod( "ipv6", function( value, element ) {
 
 $.validator.addMethod( "lettersonly", function( value, element ) {
 	return this.optional( element ) || /^[a-z]+$/i.test( value );
-}, "Letters only please" );
+}, "تنها حرف ها." );
 
 $.validator.addMethod( "letterswithbasicpunc", function( value, element ) {
 	return this.optional( element ) || /^[a-z\-.,()'"\s]+$/i.test( value );

@@ -1,0 +1,307 @@
+﻿@model CMIS.Models.ViewModels.ResultDocumentStudentViewModel;
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="card">
+        <div class="card-body">
+            <div class="row card-header mb-3">
+                <div class="col-4">
+                    <h5 class="text-center">
+                        <a asp-action="Index" class="btn-link float-right">لست جدول های ثبت شده</a>
+                    </h5>
+                </div>
+                <div class="col">
+                    <h5 class="text-center text-danger">@ViewBag.error</h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    <div class="form-group">
+                        <label for="provinces">ولایت</label>
+                        <select asp-items="@Model.Provinces" onchange="getDistricts()" id="provinces" class="form-control">
+                            <option selected disabled>...انتخاب نمودن...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="districts">ولسوالی/ناحیه</label>
+                        <select id="districts" class="form-control" onchange="getSchools()">
+                            <option selected disabled>...انتخاب نمودن...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="ResultDocument.SchoolID"></label>
+                        <select asp-for="ResultDocument.SchoolID" onchange="schoolSelected()" class="form-control">
+                            <option selected disabled>...انتخاب نمودن...</option>
+                        </select>
+                        <span asp-validation-for="ResultDocument.SchoolID"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="ResultDocument.Year"></label>
+                        <select asp-for="ResultDocument.Year" asp-items="@Model.Years" class="form-control" onchange="getRegulation()">
+                            <option selected disabled>...انتخاب نمودن...</option>
+                        </select>
+                        <span asp-validation-for="ResultDocument.Year"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="ResultDocument.SectionID"></label>
+                        <select asp-for="ResultDocument.SectionID" asp-items="@Model.Sections" class="form-control">
+                            <option selected disabled>...انتخاب نمودن...</option>
+                        </select>
+                        <span asp-validation-for="ResultDocument.SectionID"></span>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label asp-for="ResultDocument.TableNumber"></label>
+                        <input asp-for="ResultDocument.TableNumber" class="form-control" placeholder="نمبر جدول" />
+                        <span asp-validation-for="ResultDocument.TableNumber"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3 mx-auto">
+                    <div class="form-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" name="image" onchange="imageUpload()" id="image" required />
+                            <label class="custom-file-label" for="image">انتخاب سکن جدول...</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <div class="row pb-2">
+                            <div class="col-12 mx-auto">
+                                <img class="card-img-top rounded" id="imageContainer" src="" alt="" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="resultDocumentStudents"></div>
+            <div id="studentFormControls" class="row"></div>
+            <div class="row">
+                <div class="col">
+                    <button type="submit" class="btn btn-primary btn-block" id="submitButton">ثبت کردن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+    <script>
+        function imageUpload() {
+            var image = document.getElementById("image");
+            var imageContainer = document.getElementById("imageContainer");
+
+            var fileReader = new FileReader();
+            fileReader.readAsDataURL(image.files[0]);
+
+            fileReader.onload = function () {
+                imageContainer.src = this.result;
+            }
+        }
+
+        async function getDistricts() {
+            resetSchools();
+            resetYears();
+
+            const provinces = document.getElementById("provinces");
+            const selectedProvinceId = provinces.options[provinces.selectedIndex].value;
+
+            const res = await fetch("/helpers/districts?provinceId=" + selectedProvinceId)
+            const data = await res.json();
+
+            const districts = document.getElementById("districts");
+            districts.innerHTML = "";
+            districts.appendChild(await getDefaultOption());
+
+            for (const district of data) {
+                var option = document.createElement("option");
+                option.text = district.text;
+                option.value = district.value;
+                districts.appendChild(option);
+            }
+        }
+
+        async function getSchools() {
+            resetYears();
+
+            const districts = document.getElementById("districts");
+            const selectedDistrictId = districts.options[districts.selectedIndex].value;
+
+            const res = await fetch("/helpers/schools?districtId=" + selectedDistrictId)
+            const data = await res.json();
+
+            const schools = document.getElementById("ResultDocument_SchoolID");
+            schools.innerHTML = "";
+            schools.appendChild(await getDefaultOption());
+
+            for (const school of data) {
+                var option = document.createElement("option");
+                option.text = school.text;
+                option.value = school.value;
+
+                schools.appendChild(option);
+            }
+        }
+
+        function schoolSelected() {
+            resetYears();
+        }
+
+        async function resetSchools() {
+            const schools = document.getElementById("ResultDocument_SchoolID");
+            schools.innerHTML = "";
+            schools.appendChild(await getDefaultOption());
+        }
+
+        async function resetYears() {
+            const years = document.getElementById("ResultDocument_Year");
+
+            const yearsHTML = years.innerHTML;
+            years.innerHTML = "";
+            years.innerHTML = yearsHTML;
+        }
+
+        async function getDefaultOption() {
+            var defaultOption = document.createElement("option");
+            defaultOption.text = "...انتخاب نمودن...";
+            defaultOption.disabled = true;
+            defaultOption.setAttribute("selected", "true");
+            return defaultOption;
+        }
+
+        async function getRegulation() {
+            const schools = document.getElementById("ResultDocument_SchoolID");
+            const schoolId = schools.options[schools.selectedIndex].value;
+
+            const years = document.getElementById("ResultDocument_Year");
+            const year = years.options[years.selectedIndex].value;
+
+            const url = "/ResultDocumentRegulation/Regulations?schoolId=" + schoolId + "&year=" + year;
+            const res = await fetch(url);
+            const data = await res.json();
+            if (data == null) {
+                document.getElementById('resultDocumentStudents').innerHTML = `
+                    <div class="col text-center">
+                        <h4 class="text-danger">محدودیت دریافت نشد، لطفا محدودیت وضع نمایید.</h4>
+                    </div>
+                    <div class="col text-center pb-2">
+                        <a class="btn btn-dark" href="/ResultDocumentRegulation/create">وضع محدودیت</a>
+                    </div>
+                `;
+                document.getElementById("submitButton").setAttribute("disabled", "");
+                return;
+            } else {
+                document.getElementById('resultDocumentStudents').innerHTML = "";
+                document.getElementById("submitButton").removeAttribute("disabled");
+            }
+            const { studentsPerDocument, isVariable } = data;
+
+            const resultDocumentStudents = document.getElementById('resultDocumentStudents');
+            for (var i = 0; i < studentsPerDocument; i++) {
+                resultDocumentStudents.appendChild(createStudentForm(i));
+            }
+            if (isVariable) {
+                document.getElementById("studentFormControls")
+                    .innerHTML = `
+                        <div class="col pb-2">
+                            <input class="btn btn-sm btn-outline-danger float-left" type="button" value="کم کردن" onclick="decreaseStudentForm()" >
+                            <span style="display:none" id="studentsFormCount">${studentsPerDocument}</span>
+                            <input class="btn btn-sm btn-outline-success float-left" type="button" value="زیاد کردن" onclick="increaseStudentForm()" >
+                        </div>
+                    `;
+            }
+        }
+
+        function decreaseStudentForm() {
+            let formsCount = document.getElementById("studentsFormCount");
+            const count = parseInt(formsCount.innerHTML) - 1;
+            if (count >= 1) {
+                const id = "student_" + count;
+                const form = document.getElementById(id);
+                form.remove();
+                formsCount.innerHTML = count + "";
+            }
+        }
+
+        function increaseStudentForm() {
+            let formsCount = document.getElementById("studentsFormCount");
+            const count = parseInt(formsCount.innerHTML);
+            
+            document.getElementById('resultDocumentStudents')
+                .appendChild(createStudentForm(count));
+
+            formsCount.innerHTML = (count + 1) + "";
+        }
+
+        function createStudentForm(index) {
+            const form = `
+                <div class="row" id="student_${index}">
+                    <div class="col-1">
+                        <div class="form-group">
+                            <label>شماره</label>
+                            <input class="form-control" disabled="" value="${index + 1}">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="ResultDocumentStudents_${index}__AsasNumber">نمبر اساس</label>
+                            <input required class="form-control" placeholder="نمبر اساس" type="text" data-val="true" data-val-required="نمبر اساس ضروری میباشد." id="ResultDocumentStudents_${index}__AsasNumber" name="ResultDocumentStudents[${index}].AsasNumber" value="">
+                            <span class="field-validation-valid" data-valmsg-for="ResultDocumentStudents[${index}].AsasNumber" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="ResultDocumentStudents_${index}__StudentName">اسم</label>
+                            <input required class="form-control" placeholder="اسم" type="text" data-val="true" data-val-required="اسم ضروری میباشد." id="ResultDocumentStudents_${index}__StudentName" name="ResultDocumentStudents[${index}].StudentName" value="">
+                            <span class="field-validation-valid" data-valmsg-for="ResultDocumentStudents[${index}].StudentName" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="ResultDocumentStudents_${index}__FatherName">اسم پدر</label>
+                            <input required class="form-control" placeholder="اسم پدر" type="text" data-val="true" data-val-required="اسم پدر ضروری میباشد." id="ResultDocumentStudents_${index}__FatherName" name="ResultDocumentStudents[${index}].FatherName" value="">
+                            <span class="field-validation-valid" data-valmsg-for="ResultDocumentStudents[${index}].FatherName" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="ResultDocumentStudents_${index}__StudentOrderNumber">نمبر ترتیب شاگرد</label>
+                            <input required class="form-control" placeholder="نمبر ترتیب شاگرد" type="number" data-val="true" data-val-required="نمبر ترتیب شاگرد ضروری میباشد." id="ResultDocumentStudents_${index}__StudentOrderNumber" name="ResultDocumentStudents[${index}].StudentOrderNumber" value="">
+                            <span class="field-validation-valid" data-valmsg-for="ResultDocumentStudents[${index}].StudentOrderNumber" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            var div = document.createElement('div');
+            div.innerHTML = form.trim();
+            return div.firstChild;
+        }
+
+        // In your Javascript (external .js resource or <script> tag)
+        $(document).ready(function () {
+            $('#provinces').select2();
+            $('#districts').select2();
+            $('#ResultDocument_SchoolID').select2();
+            $('#ResultDocument_Year').select2();
+
+        });
+
+    </script>
+}

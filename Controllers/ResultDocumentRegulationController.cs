@@ -17,7 +17,7 @@ namespace CMIS.Controllers
         public ResultDocumentRegulationController(ApplicationDbContext db)
         {
             _db = db;
-            helpers = new HelpersController(_db);
+            helpers = new HelpersController(_db, null);
         }
         public IActionResult Index()
         {
@@ -32,6 +32,7 @@ namespace CMIS.Controllers
             ViewBag.shamsiYearsList = helpers.getYearsList();
             return View();
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(ResultDocumentRegulation resultDocReg)
@@ -59,6 +60,15 @@ namespace CMIS.Controllers
                 ViewBag.shamsiYearsList = helpers.getYearsList();
                 return View(resultDocReg);
             }
+        }
+        
+        public JsonResult Regulations(int schoolId, int year)
+        {
+            Console.WriteLine("Hello" + schoolId + year);
+            return Json(
+                _db.ResultDocumentRegulations
+                    .FirstOrDefault(x => x.SchoolID == schoolId && x.Year == year)
+            );
         }
     }
 }
