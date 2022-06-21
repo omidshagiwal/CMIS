@@ -1,0 +1,54 @@
+﻿@model IEnumerable<CMIS.Models.LookupSubject>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 card-header border-0">
+                <h4 class="float-right text-sm-center">لست مظامین</h4>
+                <h6 class="float-left text-sm-center">
+                    <a asp-action="Create" class="btn btn-link">اضافه نمودن</a>
+                </h6>
+            </div>
+            <div class="col-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">اسم</th>
+                            <th scope="col">اسم انگلیسی</th>
+                            <th scope="col">حالت</th>
+                            <th scope="col">ملاحظات</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var subject in Model)
+                        {
+                            var Status = true;
+                            if (subject.Status == null || subject.Status == false)
+                                Status = false;
+                            
+                        <tr>
+                            <td scope="row">@subject.Name</td>
+                            <td scope="row">@subject.NameEnglish</td>
+                            <td scope="row">
+                                @if (Status)
+                                {
+                                    <span>فعال</span>
+                                }
+                                else
+                                {
+                                    <span>غیر فعال</span>
+                                }
+                            </td>
+                            <td scope="row">@subject.Remarks</td>
+                            <td scope="row">
+                                <a href="/Subject/Edit/@subject.Id" class="btn btn-primary">تغییر دادن</a>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

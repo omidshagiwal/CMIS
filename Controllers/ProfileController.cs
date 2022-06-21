@@ -2,12 +2,9 @@
 using CMIS.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace CMIS.Controllers
 {
@@ -24,8 +21,10 @@ namespace CMIS.Controllers
         {
             return View();
         }
-        public IActionResult Create(string id)
+
+        public IActionResult Create(string id, string ErrorMessage = "")
         {
+            ViewBag.ErrorMessage = ErrorMessage;
             ResultDocumentStudent student = null;
             try
             {
@@ -34,15 +33,13 @@ namespace CMIS.Controllers
                     .Include(b => b.ResultDocument.LookupSchool).SingleOrDefault(x => x.StudentID == id);
 
                 if (student == null)
-                {
-                    ViewBag.ErrorMessage = "معلومات جدول شاگرد موجود نیست.";
-                    return NotFound();
-                }
+                    return RedirectToActionPermanent("NotFound", "Home",
+                        new { ErrorMessage = "معلومات جدول شاگرد موجود نیست." } );
             }
             catch (Exception e)
             {
-                ViewBag.ErrorMessage = "سرور دچار مشکل شد.";
-                return NotFound();
+                return RedirectToActionPermanent("NotFound", "Home",
+                        new { ErrorMessage = "سرور دچار مشکل شد." });
             }
 
             StudentProfile studentProfile = new StudentProfile();
@@ -51,6 +48,7 @@ namespace CMIS.Controllers
             studentProfile.FatherName = student.FatherName;
             studentProfile.ClassEnrollment = student.StudentOrderNumber;
             studentProfile.GraduationYear = student.ResultDocument.Year + "";
+            studentProfile.AsasNo = student.AsasNumber;
 
             ViewBag.SchoolName = student.ResultDocument.LookupSchool.SchoolNameDari;
             ViewBag.Provinces = helpers.getProvinces();
@@ -61,55 +59,44 @@ namespace CMIS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(StudentProfile studentProfile)
         {
-            ResultDocumentStudent student = null;
             try
             {
-                student = _db.ResultDocumentStudents
+                var stdResDoc = _db.ResultDocumentStudents
                     .Include(a => a.ResultDocument)
                     .Include(b => b.ResultDocument.LookupSchool)
                     .SingleOrDefault(x => x.StudentID == studentProfile.Id);
 
-                if (student == null)
+                if (stdResDoc == null)
+                    return RedirectToActionPermanent("Create","ResultDocument", 
+                        new { ErrorMessage = "معلومات جدول شاگرد موجود نیست."  });
+
+                var stdProfile = _db.StudentsProfile.Where(x => x.Id == studentProfile.Id).Count();
+                if (stdProfile != 0)
+                    return RedirectToAction("Create", "ExamMark", 
+                        new { studentId = studentProfile.Id, ErrorMessage = "معلومات شاگرد موجود است." });
+
+                studentProfile.GraduationYear = stdResDoc.ResultDocument.Year.ToString();
+                studentProfile.DateOfBirth = DateTime.Parse(studentProfile.DateOfBirth.ToString());
+                studentProfile.EntryType = "pro";
+                studentProfile.ThreeYearMarks = true;
+
+                if (ModelState.IsValid)
                 {
-                    ViewBag.ErrorMessage = "معلومات جدول شاگرد موجود نیست.";
-                    return RedirectToAction("Create", student.StudentID);
-                } 
+                    _db.StudentsProfile.Add(studentProfile);
+                    _db.SaveChanges();
+                    return RedirectToAction("Create", "ExamMark", 
+                        new { studentId = studentProfile.Id });
+                }
                 else
                 {
-                    var stdProfile = _db.StudentsProfile.Where(x => x.Id == studentProfile.Id).Count();
-                    if (stdProfile != 0)
-                    {
-                        ViewBag.ErrorMessage = "معلومات جدول شاگرد موجود است.";
-                        //redirect to marks page
-                        return RedirectToAction("Index");
-                    }
+                    return RedirectToAction("Create",
+                        new { id = stdResDoc.StudentID, ErrorMessage = "معلومات کامل نیست." });
                 }
-
             }
             catch (Exception e)
             {
-                ViewBag.ErrorMessage = "سرور دچار مشکل شد.";
-                return RedirectToAction("Create", student.StudentID);
-            }
-
-            studentProfile.GraduationYear = student.ResultDocument.Year + "";
-            studentProfile.AsasNo = student.AsasNumber;
-            DateTime DOB = DateTime.Parse(studentProfile.DateOfBirth + "");
-            studentProfile.DateOfBirth = DOB;
-            studentProfile.EntryType = "pro";
-            studentProfile.ThreeYearMarks = true;
-
-            if (ModelState.IsValid)
-            {
-                _db.StudentsProfile.Add(studentProfile);
-                _db.SaveChanges();
-
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                ViewBag.ErrorMessage = "معلومات کامل نیست.";
-                return RedirectToAction("Create", student.StudentID);
+                return RedirectToAction("Create", 
+                    new { id = studentProfile.Id, ErrorMessage = "سرور دچار مشکل شد." + e.Message });
             }
         }
     }

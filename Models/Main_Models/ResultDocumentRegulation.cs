@@ -27,12 +27,12 @@ namespace CMIS.Models
 
         [Required]
         [DefaultValue(false)]
-        [DisplayName("شاگرد ها در جدول مجهول است")]
+        [DisplayName("شاگرد ها در جدول متحول است")]
         public bool isVariable { get; set; }
 
         [Required(ErrorMessage = "مکتب ضروری میباشد.")]
         public int SchoolID { get; set; }
         [ForeignKey("SchoolID")]
-        public LookUp_School LookupSchool { get; set; }
+        public LookupSchool LookupSchool { get; set; }
     }
 }

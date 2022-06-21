@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CMIS.Models
 {
-    public class LookUp_Class
+    public class LookupClass
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int ClassID { get; set; }
+        public int Id { get; set; }
         public string ClassName { get; set; }
     }
 }

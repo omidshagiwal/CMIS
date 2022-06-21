@@ -17,43 +17,59 @@ namespace CMIS.Data
             : base(options)
         {
         }
-        //LookUp Models
+
+        //Lookups
         public DbSet<LookUp_Province> LookUp_Province { get; set; }
         public DbSet<LookUp_District> LookUp_District { get; set; }
-        public DbSet<LookUp_School> LookUp_School { get; set; }
+        public DbSet<LookupSchool> LookUp_School { get; set; }
         public DbSet<LookUp_Year> LookUp_Year { get; set; }
-        public DbSet<LookUp_Class> LookUp_Class { get; set; }
-        public DbSet<LookUp_Subject> LookUp_Subject { get; set; }
+        public DbSet<LookupClass> LookUp_Class { get; set; }
+        public DbSet<LookupSubject> LookupSubjects { get; set; }
         public DbSet<Lookup_Enrollment_Status> Lookup_Enrollment_Status { get; set; }
         public DbSet<LookUp_Section> LookUp_Section { get; set; }
         public DbSet<LookUp_ClassSubject> LookUp_ClassSubject { get; set; }
         public DbSet<LookUp_Student_Status> LookUp_Student_Status { get; set; }
 
-        //// Main Models
-        public DbSet<StudentProfile> StudentsProfile { get; set; }
+        // Main Models
+        public DbSet<SubjectOrder> SubjectsOrder { get; set; }
         public DbSet<ResultDocumentRegulation> ResultDocumentRegulations { get; set; }
         public DbSet<ResultDocument> ResultDocuments { get; set; }
         public DbSet<ResultDocumentStudent> ResultDocumentStudents { get; set; }
+        public DbSet<StudentProfile> StudentsProfile { get; set; }
+        public DbSet<ExamMark> ExamsMark { get; set; }
+        public DbSet<StudentClassInfo> StudentClassesInfo { get; set; }
+        public DbSet<StudentAttendance> StudentsAttendance { get; set; }
 
-        public DbSet<Student_Class_Info> Student_Class_Info { get; set; }
+
         public DbSet<Class_Sections> Class_Sections { get; set; }
-
         //public DbSet<Result_Document_Student> Result_Document_Student { get; set; }
-        //public DbSet<Student_Attendence> Student_Attendence { get; set; }
         //public DbSet<Student_Class_Subject_Year> Student_Class_Subject_Year { get; set; }
         //public DbSet<Student_Issued_Certificate> Student_Issued_Certificate { get; set; }
         //public DbSet<Student_Subject> Student_Subject { get; set; } //no data
-        //public DbSet<Student_Subject_Exam_Marks> Student_Subject_Exam_Marks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Student_Class_Info>()
-                .HasKey(p => new { p.StudentID, p.ClassID, p.GraduationYear });
-
             modelBuilder.Entity<ResultDocumentStudent>()
                 .HasKey(x => new { x.ResultDocumentID, x.AsasNumber });
+
+            modelBuilder.Entity<ExamMark>()
+                .HasKey(e => new { e.Id, e.StudentId, e.ClassId });
+
+            modelBuilder.Entity<LookupSubject>(entity =>
+            {
+                entity.Property(r => r.Status).HasDefaultValue(true);
+            });
+
+            modelBuilder.Entity<StudentClassInfo>()
+                .HasKey(p => new { p.StudentId, p.ClassId, p.GraduationYear });
+
+            modelBuilder.Entity<StudentClassInfo>(entity =>
+            {
+                entity.Property(b => b.HasMarks).HasDefaultValue(true);
+                entity.Property(x => x.InsertedDate).HasDefaultValue(DateTime.Now);
+            });
         }
     }
 }

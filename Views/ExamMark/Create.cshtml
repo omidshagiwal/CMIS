@@ -1,0 +1,358 @@
+﻿@model CMIS.Models.ViewModels.ExamMarkViewModel
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="text-danger text-center error-message">@ViewBag.ErrorMessage</h5>
+        <h6 class="text-danger text-center">@ViewBag.Exception</h6>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="StudentId">ID</label>
+                    <input asp-for="StudentId" readonly tabindex="-1" class="form-control" />
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="StudentName">اسم شاگرد</label>
+                    <input asp-for="StudentName" readonly tabindex="-1" class="form-control" />
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="StudentFatherName">اسم پدر</label>
+                    <input asp-for="StudentFatherName" readonly tabindex="-1" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="SchoolFullName">مکتب</label>
+                    <input asp-for="SchoolFullName" readonly tabindex="-1" class="form-control" />
+                    <input asp-for="SchoolId" hidden readonly />
+                    <input asp-for="GraduationYear" hidden readonly />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="orderTypes">نوع ترتیب</label>
+                    <select id="orderTypes" class="form-control" asp-items="Model.OrderTypes" onchange="loadMarksForm();">
+                        <option selected disabled>...انتخاب کردن...</option>
+                    </select>
+                </div>
+            </div>
+            <div class="d-none" id="orderNumbersBox"></div>
+        </div>
+        <form asp-action="Create" method="post" onsubmit='saveMarks(event)'>
+            <div class="my-loader"></div>
+            <div class="error-message"></div>
+            <div class="row d-none" id="subjectsMarkForm">
+                <div class="col-lg-4 col-md-6 col-sm-6 col-12 mt-3" id="grade10">
+                    <div class="row">
+                        <div class="col-4">
+                            <label for="grade10Check">صنف دهم</label>
+                        </div>
+                        <div class="col-3">
+                            <input type="checkbox" checked class="form-control h-75 w-25" onclick='disableForm(10)' id="grade10Check" value="true" />
+                        </div>
+                    </div>
+                    <ul class="list-group"></ul>
+                    <ul class="list-group extras-input-box"></ul>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-12 mt-3" id="grade11">
+                    <div class="row">
+                        <div class="col-4">
+                            <label for="grade11Check">صنف یازدهم</label>
+                        </div>
+                        <div class="col-3">
+                            <input type="checkbox" checked class="form-control h-75 w-25" onclick='disableForm(11)' id="grade11Check" value="true" />
+                        </div>
+                    </div>
+                    <ul class="list-group"></ul>
+                    <ul class="list-group extras-input-box"></ul>
+                </div>
+                <div class="col-lg-4 col-md-12 col-sm-12 col-12 mt-3" id="grade12">
+                    <div class="row">
+                        <div class="col-5">
+                            <label for="grade12Check">صنف دوازدهم</label>
+                        </div>
+                        <div class="col-3">
+                            <input type="checkbox" checked class="form-control h-75 w-25" onclick='disableForm(12)' id="grade12Check" value="true" />
+                        </div>
+                    </div>
+                    <ul class="list-group"></ul>
+                    <ul class="list-group extras-input-box"></ul>
+                </div>
+                <div class="col-12 mt-3">
+                    <button class="btn btn-block btn-primary btn-submit" type="submit" name="submit">
+                        ثبت و ادامه‌ دادن‌
+                    </button>
+                </div>
+                <div class="col-12 mt-3">
+                    <div class="submit-message text-center text-danger"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+    <script>
+        var orderNumber = null;
+        var gradeForm = {
+            grade10: null,
+            grade11: null,
+            grade12: null
+        }
+        var extras = {
+            grade10: null,
+            grade11: null,
+            grade12: null
+        }
+
+        async function saveMarks(event) {
+            event.preventDefault();
+            const submitButton = document.getElementsByClassName('btn-submit')[0];
+            submitButton.innerHTML = '<div class="spinner-border text-white"></div>';
+
+            var subjectsMark = [];
+            const examMarks = [];
+
+            for (var grade = 10; grade <= 12; grade++) {
+                const gradeDiv = document.getElementById('grade' + grade);
+                const list = gradeDiv.getElementsByTagName('ul')[0];
+                const remarks = list.getElementsByClassName('remarks-input')[0];
+                if (remarks != null) {
+                    examMarks.push({ hasMarks: false, remarks: remarks.value, grade, subjectsMark: null  });
+                } else {
+                    for (var i = 0; i < list.childElementCount; i++) {
+                        const subject = list.getElementsByTagName('li')[i];
+                        if (subject == null) return;
+                        const subjectId = parseInt(subject.getElementsByClassName('subject-id')[0].innerHTML);
+                        const mark = parseInt(subject.getElementsByClassName('subject-input')[0].value);
+                        subjectsMark.push({ subjectId, mark, grade });
+                    }
+                    const position = gradeDiv.getElementsByClassName('position-input')[0].value;
+                    examMarks.push({ hasMarks: true, remarks: '', grade, position, subjectsMark });
+                    subjectsMark = [];
+                }
+            }
+
+            const postData = {
+                studentId: document.getElementById('StudentId').value,
+                examMarks
+            }
+
+            const res = await fetch('/ExamMark/Create', {
+                method: 'post',
+                body: JSON.stringify(postData),
+                headers: {
+                    'Content-Type': "application/json"
+                }
+            });
+
+            if (res.status == 200) {
+                location.href = '/Attendance/Index?studentId=' + document.getElementById('StudentId').value;
+                return;
+            } else {
+                const data = await res.json();
+                document.getElementsByClassName('submit-message')[0].innerHTML = data.message + data.control;
+                submitButton.innerHTML = 'ثبت و ادامه‌ دادن‌';
+                return;
+            }
+        }
+
+        async function loadMarksForm() {
+            document.getElementById('subjectsMarkForm').classList = "row d-none";
+
+            const schoolId = parseInt(document.getElementById('SchoolId').value);
+            const year = document.getElementById('GraduationYear').value;
+            const orderTypes = document.getElementById('orderTypes');
+            const orderType = parseInt(orderTypes.options[orderTypes.selectedIndex].value);
+            const orderNumbers = document.getElementById('orderNumbers');
+
+            if (orderNumbers != null)
+                orderNumber = parseInt(orderNumbers.options[orderNumbers.selectedIndex].value);
+
+            if (orderType != 2) {
+                removeOrderNumbersSelect('orderNumbersBox');
+                orderNumber = null;
+            }
+
+            if (orderType == 2 && orderNumber == null) {
+                const orderNumbersBox = document.getElementById('orderNumbersBox');
+                orderNumbersBox.appendChild(getOrderNumbersSelect('orderNumbers', 'loadMarksForm'));
+                orderNumbersBox.classList = "col";
+                loadOrderNumbers('orderNumbers');
+                return;
+            }
+
+            const subjectsMarkForm = document.getElementById('subjectsMarkForm');
+            const loaderBox = document.getElementsByClassName('my-loader')[0];
+            subjectsMarkForm.classList = "row d-none";
+            loaderBox.appendChild(getLoader());
+
+            for (var grade = 10; grade <= 12; grade++) {
+                gradeForm[`grade${grade}`] = null;
+                const errorMessageBox = document.getElementsByClassName('error-message')[0];
+                errorMessageBox.innerHTML = "";
+                const url = `/subjectorder/get?schoolId=${schoolId}&year=${year}&grade=${grade}&orderType=${orderType}&orderNumber=${orderNumber}`
+
+                const res = await fetch(url);
+                if (res.status != 200)
+                    return errorMessageBox.appendChild(getErrorMessage('سرور دچار مشکل شد.'));
+
+                const data = await res.json();
+                if (data == null || data.length == 0) {
+                    errorMessageBox.appendChild(getErrorMessage('ترتیب موجود نیست!'));
+                    errorMessageBox.appendChild(getAddSubjectOrderLink());
+                    loaderBox.innerHTML = "";
+                    return;
+                }
+
+                createForm(grade, data);
+
+            }
+            subjectsMarkForm.classList = "row";
+            loaderBox.innerHTML = "";
+        }
+
+        function createForm(grade, data) {
+            const gradeDiv = document.getElementById('grade' + grade);
+            const list = gradeDiv.getElementsByTagName('ul')[0];
+            list.innerHTML = "";
+            for (var i = 0; i < data.length; i++) {
+                const subject = data[i];
+                list.appendChild(getSubjectInput(subject, grade, i));
+            }
+            const extras = gradeDiv.getElementsByClassName('extras-input-box')[0];
+            extras.appendChild(getPostionInput(grade));
+            extras.appendChild(getTotalMarksInput(grade));
+        }
+
+        function disableForm(grade) {
+            const list = document.getElementById('grade' + grade).getElementsByTagName('ul')[0];
+            const extras = document.getElementById('grade' + grade).getElementsByClassName('extras-input-box')[0];
+            const remarksInput = `
+                <li class="list-group-item">
+                    <div class="form-group">
+                        <label for="remarks${grade}"><span class="text-danger">*</span>ملاحضات</label>
+                        <textarea required class="form-control remarks-input" rows="10" id="remarks${grade}"
+                            oninvalid="this.setCustomValidity('ملاحظات ضروری میباشد.')"
+                            oninput="this.setCustomValidity('')"></textarea>
+                    </div>
+                </li>
+            `;
+            if (gradeForm[`grade${grade}`] == null) {
+                gradeForm[`grade${grade}`] = list.innerHTML;
+                list.innerHTML = remarksInput;
+
+                extras[`grade${grade}`] = extras.innerHTML;
+                extras.innerHTML = null;
+            } else {
+                list.innerHTML = gradeForm[`grade${grade}`];
+                gradeForm[`grade${grade}`] = null;
+
+                extras.innerHTML = extras[`grade${grade}`];
+                extras[`grade${grade}`] = null;
+            }
+        }
+
+        function validateMark(inputId) {
+            const input = document.getElementById(inputId);
+            const value = parseInt(input.value);
+            const span = document.getElementsByClassName(`input-validation-error-${inputId}`)[0];
+            span.innerHTML = "";
+
+            if (isNaN(value)) {
+                span.innerHTML = "نمره ضروری میباشد.";
+                return;
+            }
+
+            if (value < 0 || value > 100) {
+                span.innerHTML = "نمره باید بین 0 و 100 باشد.";
+                return;
+            }
+
+            const gradeCol = input.parentElement.parentElement.parentElement.parentElement;
+            const subjects = gradeCol.getElementsByClassName('list-group')[0];
+            var totalMarks = 0;
+
+            for (var i = 0; i < subjects.childElementCount; i++) {
+                const subject = subjects.getElementsByTagName('li')[i]
+                    .getElementsByClassName('subject-input')[0];
+                const mark = parseInt(subject.value);
+
+                if (!isNaN(mark)) totalMarks = totalMarks + mark;
+            }
+            gradeCol.getElementsByClassName('total-input')[0].value = totalMarks;
+        }
+
+        function getSubjectInput(subject, grade, index) {
+            const inputId = grade + "_" + subject.subjectId;
+            return getNode(`
+                <li class="list-group-item">
+                    <div class="form-group">
+                        <label for="${inputId}"><span class="text-danger">*</span>${subject.subjectName}</label>
+                        <input class="form-control subject-input" required type="number" id="${inputId}" placeholder="نمره"
+                            max="100" min="0" value=""
+                            oninvalid="this.setCustomValidity('لطفا نمرهّ صحیح را وارد کنید.')"
+                            oninput="this.setCustomValidity('')" onkeyup="validateMark('${inputId}')" />
+                        <span class="input-validation-error-${inputId} text-danger"></span>
+                        <span class="subject-id" hidden>${subject.subjectId}</span>
+                    </div>
+                </li>
+            `);
+        }
+
+        function getPostionInput(grade) {
+            const inputId = `grade${grade }_position`;
+            return getNode(`
+                <li class="list-group-item">
+                    <div class="form-group">
+                        <label for="${inputId}">درجه</label>
+                        <input type="text" id="${inputId}" required class="position-input form-control" placeholder="درجه" />
+                    </div>
+                </li>
+            `);
+        }
+
+        function getTotalMarksInput(grade) {
+            const inputId = `grade${grade}_total`;
+            return getNode(`
+                <li class="list-group-item">
+                    <div class="form-group">
+                        <label for="${inputId}">مجموع نمرات</label>
+                        <input type="number" id="${inputId}" readonly tabindex="-1" class="total-input form-control" placeholder="مجموع" />
+                    </div>
+                </li>
+            `);
+        }
+
+        function getErrorMessage(message) {
+            return getNode(`
+                <div class="row">
+                    <div class="col">
+                        <h5 class="text-danger text-center">${message}</h5>
+                    </div>
+                </div>
+            `);
+        }
+
+        function getAddSubjectOrderLink() {
+            return getNode(`
+                <div class="row">
+                    <div class="col text-center">
+                        <a class="btn btn-link" href="/SubjectOrder/Create">اضافه نمودن ترتیب</a>
+                    </div>
+                </div>
+            `);
+        }
+
+    </script>
+}

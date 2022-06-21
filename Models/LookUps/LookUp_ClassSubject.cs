@@ -17,7 +17,7 @@ namespace CMIS.Models
 
 
         //Relation
-        public virtual LookUp_Class LookUp_Class { get; set; }
+        public virtual LookupClass LookUp_Class { get; set; }
         public virtual Student_Subject Student_Subject { get; set; }
 
     }

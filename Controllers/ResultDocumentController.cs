@@ -75,8 +75,10 @@ namespace CMIS.Controllers
                 return NotFound(new { message = "An exception occured." });
             }
         }
-        public IActionResult Create()
+        public IActionResult Create(string ErrorMessage = "")
         {
+            ViewBag.ErrorMessage = ErrorMessage;
+
             ResultDocumentStudentViewModel resultDocumentStudentVM = new ResultDocumentStudentViewModel();
             resultDocumentStudentVM.Provinces = helpers.getProvinces();
             resultDocumentStudentVM.Years = helpers.getYearsList();

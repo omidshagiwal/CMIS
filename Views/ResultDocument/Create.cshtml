@@ -17,7 +17,7 @@
                 <div class="col-2">
                     <div class="form-group">
                         <label for="provinces">ولایت</label>
-                        <select asp-items="@Model.Provinces" onchange="getDistricts()" id="provinces" class="form-control">
+                        <select asp-items="@Model.Provinces" onchange='getDistricts("provinces", "districts", "ResultDocument_SchoolID", "ResultDocument_Year")' id="provinces" class="form-control">
                             <option selected disabled>...انتخاب نمودن...</option>
                         </select>
                     </div>
@@ -25,7 +25,7 @@
                 <div class="col">
                     <div class="form-group">
                         <label for="districts">ولسوالی/ناحیه</label>
-                        <select id="districts" class="form-control" onchange="getSchools()">
+                        <select id="districts" class="form-control" onchange='getSchools("districts", "ResultDocument_SchoolID", "ResultDocument_Year")'>
                             <option selected disabled>...انتخاب نمودن...</option>
                         </select>
                     </div>
@@ -33,7 +33,7 @@
                 <div class="col">
                     <div class="form-group">
                         <label asp-for="ResultDocument.SchoolID"></label>
-                        <select asp-for="ResultDocument.SchoolID" onchange="schoolSelected()" class="form-control">
+                        <select asp-for="ResultDocument.SchoolID" onchange='schoolSelected("ResultDocument_Year");' class="form-control">
                             <option selected disabled>...انتخاب نمودن...</option>
                         </select>
                         <span asp-validation-for="ResultDocument.SchoolID"></span>
@@ -69,7 +69,7 @@
                 <div class="col-3 mx-auto">
                     <div class="form-group">
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" name="image" onchange="imageUpload()" id="image" required />
+                            <input type="file" class="custom-file-input" name="image" onchange='imageUpload("image", "imageContainer");' id="image" required />
                             <label class="custom-file-label" for="image">انتخاب سکن جدول...</label>
                         </div>
                     </div>
@@ -103,87 +103,16 @@
     }
 
     <script>
-        function imageUpload() {
-            var image = document.getElementById("image");
-            var imageContainer = document.getElementById("imageContainer");
 
-            var fileReader = new FileReader();
-            fileReader.readAsDataURL(image.files[0]);
+        $(document).ready(async function () {
+            $('#provinces').select2();
+            $('#districts').select2();
+            $('#ResultDocument_SchoolID').select2();
+            $('#ResultDocument_Year').select2();
 
-            fileReader.onload = function () {
-                imageContainer.src = this.result;
-            }
-        }
-
-        async function getDistricts() {
-            resetSchools();
-            resetYears();
-
-            const provinces = document.getElementById("provinces");
-            const selectedProvinceId = provinces.options[provinces.selectedIndex].value;
-
-            const res = await fetch("/helpers/districts?provinceId=" + selectedProvinceId)
-            const data = await res.json();
-
-            const districts = document.getElementById("districts");
-            districts.innerHTML = "";
-            districts.appendChild(await getDefaultOption());
-
-            for (const district of data) {
-                var option = document.createElement("option");
-                option.text = district.text;
-                option.value = district.value;
-                districts.appendChild(option);
-            }
-        }
-
-        async function getSchools() {
-            resetYears();
-
-            const districts = document.getElementById("districts");
-            const selectedDistrictId = districts.options[districts.selectedIndex].value;
-
-            const res = await fetch("/helpers/schools?districtId=" + selectedDistrictId)
-            const data = await res.json();
-
-            const schools = document.getElementById("ResultDocument_SchoolID");
-            schools.innerHTML = "";
-            schools.appendChild(await getDefaultOption());
-
-            for (const school of data) {
-                var option = document.createElement("option");
-                option.text = school.text;
-                option.value = school.value;
-
-                schools.appendChild(option);
-            }
-        }
-
-        function schoolSelected() {
-            resetYears();
-        }
-
-        async function resetSchools() {
-            const schools = document.getElementById("ResultDocument_SchoolID");
-            schools.innerHTML = "";
-            schools.appendChild(await getDefaultOption());
-        }
-
-        async function resetYears() {
-            const years = document.getElementById("ResultDocument_Year");
-
-            const yearsHTML = years.innerHTML;
-            years.innerHTML = "";
-            years.innerHTML = yearsHTML;
-        }
-
-        async function getDefaultOption() {
-            var defaultOption = document.createElement("option");
-            defaultOption.text = "...انتخاب نمودن...";
-            defaultOption.disabled = true;
-            defaultOption.setAttribute("selected", "true");
-            return defaultOption;
-        }
+            await getYears("ResultDocument_Year");
+            await getSections("ResultDocument_SectionID");
+        });
 
         async function getRegulation() {
             const schools = document.getElementById("ResultDocument_SchoolID");
@@ -293,15 +222,6 @@
             div.innerHTML = form.trim();
             return div.firstChild;
         }
-
-        // In your Javascript (external .js resource or <script> tag)
-        $(document).ready(function () {
-            $('#provinces').select2();
-            $('#districts').select2();
-            $('#ResultDocument_SchoolID').select2();
-            $('#ResultDocument_Year').select2();
-
-        });
 
     </script>
 }

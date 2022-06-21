@@ -1,40 +1,42 @@
 ﻿@model CMIS.Models.ResultDocument
 
 <div class="row">
-    <div class="col">
+    <div class="col-lg-2 col-md-4 col-sm-4 col-12">
         <div class="form-group">
             <label for="provinces">ولایت</label> <br />
-            <select asp-items="@ViewBag.Provinces" onchange="getDistricts()" id="provinces" class="select-2 form-control">
+            <select asp-items="@ViewBag.Provinces" 
+                    onchange='getDistricts("provinces", "districts", "SchoolID", "Year", "sections");' 
+                    id="provinces" class="select-2 form-control">
                 <option selected disabled>...انتخاب نمودن...</option>
             </select>
         </div>
     </div>
-    <div class="col">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-12">
         <div class="form-group">
             <label for="districts">ولسوالی/ناحیه</label> <br />
-            <select id="districts" class="select-2 form-control" onchange="getSchools();">
+            <select id="districts" class="select-2 form-control" onchange='getSchools("districts", "SchoolID", "Year", "sections");'>
                 <option selected disabled>...انتخاب نمودن...</option>
             </select>
         </div>
     </div>
-    <div class="col">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-12">
         <div class="form-group">
             <label asp-for="SchoolID"></label> <br />
-            <select asp-for="SchoolID" onchange="resetSections();" class="select-2 form-control">
+            <select asp-for="SchoolID" onchange='resetSections("sections");' class="select-2 form-control">
                 <option selected disabled>...انتخاب نمودن...</option>
             </select>
             <span asp-validation-for="SchoolID"></span>
         </div>
     </div>
-    <div class="col">
+    <div class="col-lg-2 col-md-6 col-sm-6 col-12">
         <div class="form-group">
             <label for="sections">شعبه</label> <br />
-            <select id="sections" class="select-2 form-control" onchange="resetYears();">
+            <select id="sections" class="select-2 form-control" onchange='resetYears("Year");'>
                 <option selected disabled>...انتخاب نمودن...</option>
             </select>
         </div>
     </div>
-    <div class="col">
+    <div class="col-lg-2 col-md-6 col-sm-6 col-12">
         <div class="form-group">
             <label asp-for="Year"></label> <br />
             <select asp-for="Year" class="select-2 form-control" onchange="getResultDocuments();">
@@ -44,48 +46,50 @@
         </div>
     </div>
 </div>
-
 <div class="row" id="documentsList"></div>
-    <div class="modal fade"
+<div class="modal fade"
          id="studentsList"
          data-backdrop="static"
          data-keyboard="false"
          tabindex="-1"
          aria-labelledby="studentsList"
          aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
-                <div class="modal-header text-center">
-                    <button type="button"
-                            class="close float-right"
-                            data-dismiss="modal"
-                            aria-label="Close"
-                            onclick="closeModal()">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h5 class="modal-title" id="studentsList">لست شاگرد ها</h5>
+                <div class="modal-header border-0 row">
+                    <div class="col-1">
+                        <button type="button"
+                                class="close float-right text-danger"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                                onclick="closeModal()">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="col-11 text-center">
+                        <h5 class="modal-title">لست شاگرد ها</h5>
+                    </div>
                 </div>
                 <div class="modal-body">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">نمبر اساس</th>
-                                <th scope="col">نمبر ترتیب</th>
-                                <th scope="col">اسم</th>
-                                <th scope="col">ولد</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @*<tr>
-                                <td scope="row"></td>
-                                <td scope="row"></td>
-                                <td scope="row"></td>
-                                <td scope="row"></td>
-                                <td scope="row"></td>
-                            </tr>*@
-                        </tbody>
-                    </table>
+                    <div class="row">
+                        <div class="col-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">نمبر اساس</th>
+                                        <th scope="col">نمبر ترتیب</th>
+                                        <th scope="col">اسم</th>
+                                        <th scope="col">ولد</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div class="col-12">
+                            <img class="card-img-bottom rounded" id="imageContainer" src="" alt="" />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -93,92 +97,12 @@
 
 @section Scripts{
     <script>
-        var years = null;
-        var sections = null;
-
-        $(document).ready(function () {
+        
+        $(document).ready(async function () {
             $('.select-2').select2();
-            getYears();
-            getSections();
+            await getYears("Year");
+            await getSections("sections");
         });
-
-        async function getDistricts() {
-            resetSchools();
-            resetSections();
-            resetYears();
-
-            const provinces = document.getElementById("provinces");
-            const selectedProvinceId = provinces.options[provinces.selectedIndex].value;
-
-            const res = await fetch("/helpers/districts?provinceId=" + selectedProvinceId)
-            const data = await res.json();
-
-            const districts = document.getElementById("districts");
-            districts.innerHTML = "";
-            districts.appendChild(await getDefaultOption());
-
-            for (const district of data) {
-                var option = document.createElement("option");
-                option.text = district.text;
-                option.value = district.value;
-                districts.appendChild(option);
-            }
-        }
-
-        async function getSchools() {
-            resetSections();
-            resetYears();
-
-            const districts = document.getElementById("districts");
-            const selectedDistrictId = districts.options[districts.selectedIndex].value;
-
-            const res = await fetch("/helpers/schools?districtId=" + selectedDistrictId)
-            const data = await res.json();
-
-            const schools = document.getElementById("SchoolID");
-            schools.innerHTML = "";
-            schools.appendChild(await getDefaultOption());
-
-            for (const school of data) {
-                var option = document.createElement("option");
-                option.text = school.text;
-                option.value = school.value;
-
-                schools.appendChild(option);
-            }
-        }
-
-        async function getSections() {
-            const res = await fetch("/helpers/sections")
-            sections = await res.json();
-
-            const sectionsSelect = document.getElementById("sections");
-            sectionsSelect.innerHTML = "";
-            sectionsSelect.appendChild(await getDefaultOption());
-
-            for (const section of sections) {
-                var option = document.createElement("option");
-                option.text = section.text;
-                option.value = section.value;
-                sectionsSelect.appendChild(option);
-            }
-        }
-
-        async function getYears() {
-            const res = await fetch("/helpers/years")
-            years = await res.json();
-
-            const yearsSelect = document.getElementById("Year");
-            yearsSelect.innerHTML = "";
-            yearsSelect.appendChild(await getDefaultOption());
-
-            for (const year of years) {
-                var option = document.createElement("option");
-                option.text = year.text;
-                option.value = year.value;
-                yearsSelect.appendChild(option);
-            }
-        }
 
         async function getResultDocuments() {
             const schools = document.getElementById("SchoolID");
@@ -213,7 +137,7 @@
 
                     resDoc.path = `/resultdocuments/${resDoc.provinceName}/${resDoc.districtId}/${resDoc.schoolId}/${resDoc.year}/${resDoc.path}`;
 
-                    var item = getDocItem(resDoc.id, resDoc.studentsCount);
+                    var item = getDocItem(resDoc.id, resDoc.studentsCount, resDoc.path);
 
                     const date = new Date(resDoc.insertedDate)
                     item.getElementsByClassName('entryDate')[0].innerHTML = date.getFullYear()+ '/' + date.getMonth() + '/' + date.getDay();
@@ -224,7 +148,7 @@
             }
         }
 
-        async function getStudents(documentId) {
+        async function getStudents(documentId, resDocPath) {
             const url = "/ResultDocument/ListStudentsJson?documentId=" + documentId;
             const res = await fetch(url);
             const data = await res.json();
@@ -266,62 +190,23 @@
                     addProfile.setAttribute('scope', 'row');
                     addProfile.innerHTML = `<a href="/Profile/Create/${student.studentID}" class="btn btn-primary">کامل سازی</a>`;
 
-                    console.log(student);
-
-                    tr.appendChild(orderNumber);
                     tr.appendChild(asasNumber);
+                    tr.appendChild(orderNumber);
                     tr.appendChild(name);
                     tr.appendChild(fatherName);
                     tr.appendChild(addProfile);
 
                     modalBody.getElementsByTagName('tbody')[0].appendChild(tr);
+
+                    const imageContainer = document.getElementById("imageContainer");
+                    imageContainer.setAttribute("src", resDocPath);
                 }
             }
         }
 
-        async function resetSchools() {
-            const schools = document.getElementById("SchoolID");
-            schools.innerHTML = "";
-            schools.appendChild(await getDefaultOption());
-        }
-
-        function resetYears() {
-            const yearsSelect = document.getElementById("Year");
-            yearsSelect.innerHTML = "";
-            yearsSelect.appendChild(getDefaultOption());
-
-            for (const year of years) {
-                var option = document.createElement("option");
-                option.text = year.text;
-                option.value = year.value;
-                yearsSelect.appendChild(option);
-            }
-        }
-
-        function resetSections() {
-            const sectionsSelect = document.getElementById("sections");
-            sectionsSelect.innerHTML = "";
-            sectionsSelect.appendChild(getDefaultOption());
-
-            for (const section of sections) {
-                var option = document.createElement("option");
-                option.text = section.text;
-                option.value = section.value;
-                sectionsSelect.appendChild(option);
-            }
-        }
-
-        function getDefaultOption() {
-            var defaultOption = document.createElement("option");
-            defaultOption.text = "...انتخاب نمودن...";
-            defaultOption.disabled = true;
-            defaultOption.setAttribute("selected", "true");
-            return defaultOption;
-        }
-
-        function getDocItem(documentId, numberOfStudents = 0) {
+        function getDocItem(documentId, numberOfStudents = 0, resDocPath) {
             const item = `
-            <div class="col-3">
+            <div class="col-xl-3 col-lg-4 col-md-4 col-sm-6 col-12">
                 <div class="card bg-secondary-gradient">
                     <div class="card-body">
                         <div class="row pb-1">
@@ -332,7 +217,7 @@
                                 <span class="entryDate float-left"></span>
                             </div>
                             <div class="col-12 mt-2">
-                                <button class="btn btn-primary btn-block btn-list-students" onclick="getStudents('${documentId}')" type="button">
+                                <button class="btn btn-primary btn-block btn-list-students" onclick="getStudents('${documentId}','${resDocPath}')" type="button">
                                     <i class="fas fa-eye"></i>
                                     <span>لست شاگردان</span>
                                     <span class="badge badge-pill badge-light">${numberOfStudents}</span>

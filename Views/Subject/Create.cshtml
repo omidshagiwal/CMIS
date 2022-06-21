@@ -1,0 +1,54 @@
+﻿@model CMIS.Models.LookupSubject;
+
+<form asp-action="Create" method="post">
+    <div class="card">
+        <div class="card-body">
+            <div class="row card-header mb-3">
+                <div class="col">
+                    <h4 class="float-right text-sm-center">اضافه نمودن مضمون</h4>
+                    <h6 class="text-center text-danger">@ViewBag.Message</h6>
+                    <h6 class="float-left text-sm-center">
+                        <a asp-action="Index" class="btn-link">لست مضامین</a>
+                    </h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="Name"></label>
+                        <input asp-for="Name" class="form-control" placeholder="اسم" />
+                        <span class="text-danger" asp-validation-for="Name"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="NameEnglish"></label>
+                        <input asp-for="NameEnglish" class="form-control" placeholder="اسم انگلیسی" />
+                        <span class="text-danger" asp-validation-for="NameEnglish"></span>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label asp-for="Remarks"></label>
+                        <textarea asp-for="Remarks" class="form-control" rows="3" placeholder="ملاحظات"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <button type="submit" class="btn btn-primary btn-block">ثبت کردن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+    <script>
+
+    </script>
+}

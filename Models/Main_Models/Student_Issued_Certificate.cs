@@ -18,9 +18,9 @@ namespace CMIS.Models.Main_Models
         public DateTime? GeneratedDate { get; set; }
 
         //Relation
-        public virtual Student_Class_Info Student_Class_Info { get; set; }
+        public virtual StudentClassInfo Student_Class_Info { get; set; }
         public virtual LookUp_District LookUp_District { get; set; }
-        public virtual LookUp_School LookUp_School { get; set; }
+        public virtual LookupSchool LookUp_School { get; set; }
 
     }
 }

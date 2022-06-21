@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CMIS.Models
 {
-    public class LookUp_School
+    public class LookupSchool
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

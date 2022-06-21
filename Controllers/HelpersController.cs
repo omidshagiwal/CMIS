@@ -29,6 +29,50 @@ namespace CMIS.Controllers
                 Text = x.ProvinceNameDari
             });
         }
+        public IEnumerable<SelectListItem> getClasses()
+        {
+            return _db.LookUp_Class.Select(x => new SelectListItem
+            {
+                Value = x.Id.ToString(),
+                Text = x.ClassName
+            });
+        }
+        public IEnumerable<SelectListItem> getSubjects()
+        {
+            return _db.LookupSubjects
+                .Where(b => b.Status == true)
+                .Select(x => new SelectListItem
+                {
+                    Value = x.Id.ToString(),
+                    Text = x.Name
+                });
+        }
+        public IEnumerable<SelectListItem> getSubjectOrderTypes()
+        {
+            List<SelectListItem> orderTypes = new List<SelectListItem>();
+            
+            orderTypes.Add(new SelectListItem
+            {
+                    Value = CMIS.Enums.SubjectOrderTypes.AllClass + "",
+                    Text = "تمام صنف"
+            });
+            orderTypes.Add(new SelectListItem
+            {
+                Value = CMIS.Enums.SubjectOrderTypes.UnorderedResultDocument + "",
+                Text = "جدول نا منظم"
+            });
+
+            return orderTypes;
+        }
+        public IEnumerable<SelectListItem> SubjectOrderTypes()
+        {
+            List<SelectListItem> orderTypes = new List<SelectListItem>();
+            orderTypes.Add(new SelectListItem { Value = "1", Text = "تمام صنف" });
+            orderTypes.Add(new SelectListItem { Value = "2", Text = "جدول نامنظم" });
+            orderTypes.Add(new SelectListItem { Value = "3", Text = "زبان اول دری" });
+            orderTypes.Add(new SelectListItem { Value = "4", Text = "زبان اول پشتو" });
+            return orderTypes;
+        }
         public IEnumerable<SelectListItem> getYearsList()
         {
             //621 years
@@ -80,6 +124,14 @@ namespace CMIS.Controllers
         {
             return Json(getYearsList());
         }
+        public JsonResult Subjects()
+        {
+            return Json(getSubjects());
+        }
+        public JsonResult Classes()
+        {
+            return Json(getClasses());
+        }
         public bool createDirectory(string name) {
             if (name == null || name.Trim() == "")
                 return false;
@@ -102,15 +154,13 @@ namespace CMIS.Controllers
 
             try
             {
-                using (var fileStream =
-                new FileStream(Path.Combine(fullPath + name), FileMode.Create))
+                using (var fileStream = new FileStream(Path.Combine(fullPath + name), FileMode.Create))
                     file.CopyTo(fileStream);
 
                 return name;
             }
             catch (Exception)
             {
-
                 return null;
             }
         }

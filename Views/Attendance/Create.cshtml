@@ -1,0 +1,119 @@
+﻿@model List<CMIS.Models.StudentAttendance>
+
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            <label asp-for="@Model[0].StudentId"></label>
+            <input asp-for="@Model[0].StudentId" tabindex="-1" readonly class="form-control" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <label asp-for="@Model[0].StudentName"></label>
+            <input asp-for="@Model[0].StudentName" tabindex="-1" readonly class="form-control" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <label asp-for="@Model[0].StudentFatherName"></label>
+            <input asp-for="@Model[0].StudentFatherName" tabindex="-1" readonly class="form-control" />
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group">
+            <label asp-for="@Model[0].SchoolFullName"></label>
+            <input asp-for="@Model[0].SchoolFullName" tabindex="-1" readonly class="form-control" />
+        </div>
+    </div>
+</div>
+<form asp-action="Create" method="post">
+    @for (int i = 0; i < Model.Count; i++)
+    {
+        <div class="row">
+            <input asp-for="@Model[i].StudentId" class="d-none" />
+            <input asp-for="@Model[i].ClassId" class="d-none" />
+            <div class="col-1">
+                <div class="form-group">
+                    <label asp-for="@Model[i].Class"></label>
+                    <input asp-for="@Model[i].Class" tabindex="-1" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="@Model[i].Year"></label>
+                    <input asp-for="@Model[i].Year" tabindex="-1" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="@Model[i].StudyDays"></label>
+                    <input asp-for="@Model[i].StudyDays" tabindex="-1" value="" readonly class="form-control study-days" />
+                    <span asp-validation-for="@Model[i].StudyDays" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="@Model[i].Present"></label>
+                    <input asp-for="@Model[i].Present" onkeyup="calculateTotalDays(event)" value="" class="form-control present" placeholder="حاضر" />
+                    <span asp-validation-for="@Model[i].Present" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="@Model[i].Absent"></label>
+                    <input asp-for="@Model[i].Absent" onkeyup="calculateTotalDays(event)" value="" class="form-control absent" placeholder="غیر حاضر" />
+                    <span asp-validation-for="@Model[i].Absent" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="@Model[i].Sick"></label>
+                    <input asp-for="@Model[i].Sick" onkeyup="calculateTotalDays(event)" value="" class="form-control sick" placeholder="مریض" />
+                    <span asp-validation-for="@Model[i].Sick" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="@Model[i].Leave"></label>
+                    <input asp-for="@Model[i].Leave" onkeyup="calculateTotalDays(event)" value="" class="form-control leave" placeholder="رخصت" />
+                    <span asp-validation-for="@Model[i].Leave" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="row">
+        <div class="col-12">
+            <h5 class="text-center text-danger">@ViewBag.ErrorMessage</h5>
+        </div>
+        <div class="col-12">
+            <input type="submit" class="btn btn-block btn-primary" value="ثبت و ادامه‌ دادن" />
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+    <script>
+        function calculateTotalDays(event) {
+            const row = event.target.parentElement.parentElement.parentElement;
+
+            var studyDays = row.getElementsByClassName('study-days')[0];
+
+            var present = parseInt(row.getElementsByClassName('present')[0].value);
+            var absent = parseInt(row.getElementsByClassName('absent')[0].value);
+            var sick = parseInt(row.getElementsByClassName('sick')[0].value);
+            var leave = parseInt(row.getElementsByClassName('leave')[0].value);
+
+            if (isNaN(present)) present = 0;
+            if (isNaN(absent)) absent = 0;
+            if (isNaN(sick)) sick = 0;
+            if (isNaN(leave)) leave = 0;
+
+            studyDays.value = (present + absent + sick + leave);
+        }
+
+    </script>
+}

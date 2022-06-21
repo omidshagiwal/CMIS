@@ -1,0 +1,32 @@
+﻿@model IEnumerable<CMIS.Models.SubjectOrder>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 card-header border-0">
+                <h4 class="float-right text-sm-center">لست تنظیمات مضامین</h4>
+                <h6 class="float-left text-sm-center">
+                    <a asp-action="Create" class="btn btn-link">اضافه نمودن</a>
+                </h6>
+            </div>
+            <div class="col-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">اسم مکتب</th>
+                            <th scope="col">سال</th>
+                            <th scope="col">نوع ترتیب</th>
+                            <th scope="col">شماره ترتیب</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @*@foreach (var subject in Model)
+                        {
+                            
+                        }*@
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

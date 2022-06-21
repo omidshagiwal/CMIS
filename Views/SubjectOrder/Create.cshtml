@@ -1,0 +1,407 @@
+﻿@model CMIS.Models.ViewModels.SubjectOrderViewModel;
+
+<div class="card">
+    <div class="card-body">
+        <div class="row card-header mb-3">
+            <div class="col">
+                <h4 class="float-right text-sm-center">تنظیم مضامین برای صنف</h4>
+                <h6 class="float-left text-sm-center">
+                    <a asp-action="Index" class="btn btn-link">لست تنظیمات</a>
+                </h6>
+            </div>
+            <div class="col-12">
+                <h6 class="text-center text-danger" id="errorMessage">@ViewBag.Message</h6>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <div class="form-group">
+                    <label for="provinces">ولایت</label>
+                    <select asp-items="@Model.Provinces" onchange='getDistricts("provinces", "districts", "SubjectOrder_SchoolId", "SubjectOrder_Year", ""); resetSubjectsForm(); resetOrderType();' id="provinces" class="form-control select-2">
+                        <option selected disabled>...انتخاب نمودن...</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="districts">ولسوالی/ناحیه</label>
+                    <select id="districts" class="form-control select-2" onchange='getSchools("districts", "SubjectOrder_SchoolId", "SubjectOrder_Year", ""); resetSubjectsForm(); resetOrderType();'>
+                        <option selected disabled>...انتخاب نمودن...</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label asp-for="SubjectOrder.SchoolId"></label>
+                    <select asp-for="SubjectOrder.SchoolId" onchange='schoolSelected("SubjectOrder_Year"); resetSubjectsForm(); resetOrderType();' class="form-control select-2">
+                        <option selected disabled>...انتخاب نمودن...</option>
+                    </select>
+                    <span asp-validation-for="SubjectOrder.SchoolId"></span>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label asp-for="SubjectOrder.Year"></label>
+                    <select asp-for="SubjectOrder.Year" asp-items="@Model.Years" class="form-control select-2" onchange='resetSubjectsForm();resetOrderType();'>
+                        <option selected disabled>...انتخاب نمودن...</option>
+                    </select>
+                    <span asp-validation-for="SubjectOrder.Year"></span>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label asp-for="SubjectOrder.OrderType"></label>
+                    <select asp-for="SubjectOrder.OrderType" asp-items="Model.OrderTypes" class="form-control" onchange="loadSubjectsOrderForm(); resetSubjectsForm();">
+                        <option selected disabled>...انتخاب نمودن...</option>
+                    </select>
+                    <span asp-validation-for="SubjectOrder.OrderType"></span>
+                </div>
+            </div>
+            <div class="col-12" id="orderNumbers"></div>
+        </div>
+        <div id="subjectsOrderForm" class="d-none">
+            <div class="row mt-3">
+                <div class="col-lg-4 col-md-6 col-sm-6 col-12 mt-3" id="grade10">
+                    <div>
+                        <h6 class="text-center">صنف دهم</h6>
+                    </div>
+                    <ul class="list-group activeList"></ul>
+                    <ul class="list-group inactiveList"></ul>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-12 mt-3" id="grade11">
+                    <div>
+                        <h6 class="text-center">صنف یازدهم</h6>
+                    </div>
+                    <ul class="list-group activeList"></ul>
+                    <ul class="list-group inactiveList"></ul>
+                </div>
+                <div class="col-lg-4 col-md-12 col-sm-12 col-12 mt-3" id="grade12">
+                    <div>
+                        <h6 class="text-center">صنف دوازدهم</h6>
+                    </div>
+                    <ul class="list-group activeList"></ul>
+                    <ul class="list-group inactiveList"></ul>
+                </div>
+                <div class="col-12 mt-3">
+                    <button type="button" onclick="saveSubjectOrders();" class="btn btn-primary btn-block">ثبت کردن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+    <script>
+        $(document).ready(async function () {
+            $('.select-2').select2();
+            await getYears("SubjectOrder_Year");
+        });
+
+        var subjectsList = null;
+        let schoolId;
+        let year;
+        let orderType;
+        let orderNumber = "-1";
+
+        async function saveSubjectOrders() {
+            /*{
+                "schoolId": 121,
+                "year": "1401",
+                "orderType": 1,
+                "SubjectOrder": [{
+                    "sortNumber": 1,
+                    "subjectId": 1,
+                    "class": 1
+                }]
+            }*/
+
+            if (
+                document.getElementById('grade10')
+                    .getElementsByClassName('list-group activeList')[0]
+                    .childElementCount < 17 ||
+                document.getElementById('grade11')
+                    .getElementsByClassName('list-group activeList')[0]
+                    .childElementCount < 16 ||
+                document.getElementById('grade12')
+                    .getElementsByClassName('list-group activeList')[0]
+                    .childElementCount < 16
+            ) {
+                return document.getElementById('errorMessage')
+                    .innerHTML = "صنف دهم ۱۷ مضمون، ۱۱ و ۱۲ باید ۱۶ مضمون باشند."
+            }
+
+            var subjects = [];
+            for (var grade = 10; grade <= 12; grade++) {
+                const gradeActiveSubjects = document.getElementById('grade' + grade)
+                    .getElementsByClassName('list-group activeList')[0];
+                for (var i = 0; i < gradeActiveSubjects.childElementCount; i++) {
+                    subjects.push({
+                        class: grade,
+                        sortNumber: parseInt(gradeActiveSubjects
+                            .getElementsByClassName('sortNumber')[i]
+                            .innerHTML),
+                        subjectId: parseInt(gradeActiveSubjects
+                            .getElementsByClassName('subject-id')[i]
+                            .innerHTML)
+                    });
+                }
+            }
+
+            const form = {
+                schoolId: parseInt(schoolId),
+                year,
+                SubjectOrder: subjects
+            }
+
+            if (orderType == "AllClass") form.orderType = 1;
+            else form.orderType = 2;
+
+            if (orderType == "UnorderedResultDocument") form.orderNumber = parseInt(orderNumber);
+
+            const res = await fetch('/SubjectOrder/Create', {
+                method: 'post',
+                body: JSON.stringify(form),
+                headers: {
+                    'Content-Type': "application/json"
+                }
+            });
+            const body = await res.json();
+
+            if (res.status == 200)
+                return window.location.replace("/SubjectOrder/Index");
+
+            return document.getElementById('errorMessage').innerHTML = body.value;
+        }
+
+        async function loadSubjectsOrderFormUnorderd() {
+            resetSubjectsForm();
+
+            if (isNaN(schoolId) || isNaN(year))
+                return document.getElementById('errorMessage')
+                    .innerHTML = "لطفا مکتب و سال را انتخاب کنید."
+
+            const orderNumbers = document.getElementById('orderNumbersSelect');
+            orderNumber = orderNumbers.options[orderNumbers.selectedIndex].value;
+
+            await createSubjects();
+        }
+
+        async function loadSubjectsOrderForm() {
+            resetSubjectsForm();
+
+            const orderTypes = document.getElementById('SubjectOrder_OrderType');
+            orderType = orderTypes.options[orderTypes.selectedIndex].value;
+
+            const schools = document.getElementById('SubjectOrder_SchoolId');
+            schoolId = schools.options[schools.selectedIndex].value;
+
+            const years = document.getElementById('SubjectOrder_Year');
+            year = years.options[years.selectedIndex].value;
+
+            if (isNaN(schoolId) || isNaN(year)) {
+                document.getElementById('errorMessage').innerHTML = "لطفا مکتب و سال را انتخاب کنید."
+                return;
+            }
+
+            if (orderType == "UnorderedResultDocument") {
+                const orderNumbers = document.getElementById('orderNumbers');
+                orderNumbers.innerHTML = "";
+                orderNumbers.appendChild(getOrderNumbersSelect("orderNumbersSelect", "loadSubjectsOrderFormUnorderd"));
+                return loadOrderNumbers("orderNumbersSelect");
+            } else if (orderType == "AllClass") {
+                document.getElementById('orderNumbers').innerHTML = "";
+            }
+
+            await createSubjects();
+        }
+
+        function resetSubjectsForm() {
+            const grade10 = document.getElementById('grade10');
+            const grade11 = document.getElementById('grade11');
+            const grade12 = document.getElementById('grade12');
+
+            grade10.getElementsByClassName('list-group inactiveList')[0].innerHTML = "";
+            grade11.getElementsByClassName('list-group inactiveList')[0].innerHTML = "";
+            grade12.getElementsByClassName('list-group inactiveList')[0].innerHTML = "";
+
+            grade10.getElementsByClassName('list-group activeList')[0].innerHTML = "";
+            grade11.getElementsByClassName('list-group activeList')[0].innerHTML = "";
+            grade12.getElementsByClassName('list-group activeList')[0].innerHTML = "";
+
+            document.getElementById('subjectsOrderForm').className = "d-none";
+        }
+
+        function resetOrderType() {
+            const types = document.getElementById("SubjectOrder_OrderType");
+            types.innerHTML = "";
+            types.appendChild(getDefaultOption());
+
+            const AllClass = document.createElement('option');
+            AllClass.value = "AllClass";
+            AllClass.text = "تمام صنف";
+
+            const UnorderedResultDocument = document.createElement('option');
+            UnorderedResultDocument.value = "UnorderedResultDocument";
+            UnorderedResultDocument.text = "جدول نامنظم";
+
+            types.appendChild(AllClass);
+            types.appendChild(UnorderedResultDocument);
+
+            document.getElementById('orderNumbers').innerHTML = "";
+        }
+
+        async function createSubjects() {
+            if (subjectsList == null) {
+                var res = await fetch('/helpers/subjects');
+                subjectsList = await res.json();
+            }
+
+            document.getElementById('subjectsOrderForm').className = "";
+            for (var i = 0; i < subjectsList.length; i++) {
+                const subject = {
+                    id: subjectsList[i].value,
+                    name: subjectsList[i].text,
+                    sortNumber: i + 1
+                };
+                document.getElementById('grade10')
+                    .getElementsByClassName('list-group inactiveList')[0]
+                    .appendChild(getListItem(subject, 10));
+
+                document.getElementById('grade11')
+                    .getElementsByClassName('list-group inactiveList')[0].
+                    appendChild(getListItem(subject, 11));
+
+                document.getElementById('grade12')
+                    .getElementsByClassName('list-group inactiveList')[0].
+                    appendChild(getListItem(subject, 12));
+            }
+        }
+
+        function swapUp(id, grade) {
+            const gradeDiv = document.getElementById("grade" + grade);
+            const activeList = gradeDiv.getElementsByClassName('list-group activeList')[0];
+            const subject = activeList.getElementsByClassName("subject_" + id)[0];
+            const prevSubject = subject.previousSibling;
+
+            if (prevSubject != null) {
+                const subjectSortNumber = subject.getElementsByClassName('sortNumber')[0].innerHTML;
+                const prevSubjectSortNumber = prevSubject.getElementsByClassName('sortNumber')[0].innerHTML;
+
+                subject.getElementsByClassName('sortNumber')[0].innerHTML = prevSubjectSortNumber;
+                prevSubject.getElementsByClassName('sortNumber')[0].innerHTML = subjectSortNumber;
+
+                subject.parentElement.insertBefore(subject, prevSubject);
+            }
+        }
+
+        function swapDown(id, grade) {
+            const gradeDiv = document.getElementById("grade" + grade);
+            const activeList = gradeDiv.getElementsByClassName('list-group activeList')[0];
+            const subject = activeList.getElementsByClassName("subject_" + id)[0];
+            const nextSubject = subject.nextSibling;
+
+            if (nextSubject != null) {
+                const subjectSortNumber = subject.getElementsByClassName('sortNumber')[0].innerHTML;
+                const nextSubjectSortNumber = nextSubject.getElementsByClassName('sortNumber')[0].innerHTML;
+
+                subject.getElementsByClassName('sortNumber')[0].innerHTML = nextSubjectSortNumber;
+                nextSubject.getElementsByClassName('sortNumber')[0].innerHTML = subjectSortNumber;
+
+                subject.parentElement.insertBefore(nextSubject, subject);
+            }
+        }
+
+        function enableUpDown(id, grade) {
+            const gradeDiv = document.getElementById('grade' + grade);
+            const subjectItem = gradeDiv.getElementsByClassName("subject_" + id)[0];
+
+            subjectItem.getElementsByTagName('button')[0].removeAttribute("disabled");
+            subjectItem.getElementsByTagName('button')[1].removeAttribute("disabled");
+
+            const onclick = `disableUpDown("${id}","${grade}")`;
+            subjectItem.getElementsByTagName('input')[0].setAttribute('onclick', onclick);
+
+            const activeItems = gradeDiv.getElementsByClassName('list-group activeList')[0];
+            const inactiveItems = gradeDiv.getElementsByClassName('list-group inactiveList')[0];
+
+            const subjectItemInactive = inactiveItems.getElementsByClassName("subject_" + id)[0];
+            subjectItemInactive.getElementsByClassName('sortNumber')[0].innerHTML =
+                parseInt(activeItems.childNodes.length) + 1;
+
+            inactiveItems.removeChild(subjectItemInactive);
+            activeItems.appendChild(subjectItemInactive);
+        }
+
+        function disableUpDown(id, grade) {
+            const gradeDiv = document.getElementById('grade' + grade);
+            const subjectItem = gradeDiv.getElementsByClassName("subject_" + id)[0];
+
+            subjectItem.getElementsByTagName('button')[0].setAttribute("disabled", "");
+            subjectItem.getElementsByTagName('button')[1].setAttribute("disabled", "");
+
+            const onclick = `enableUpDown("${id}","${grade}")`;
+            subjectItem.getElementsByTagName('input')[0].setAttribute('onclick', onclick);
+
+            const activeItems = gradeDiv.getElementsByClassName('list-group activeList')[0];
+            const inactiveItems = gradeDiv.getElementsByClassName('list-group inactiveList')[0];
+
+            const subjectItemActive = activeItems.getElementsByClassName("subject_" + id)[0];
+            subjectItemActive.getElementsByClassName('sortNumber')[0].innerHTML = '-';
+
+            activeItems.removeChild(subjectItemActive);
+            inactiveItems.appendChild(subjectItemActive);
+
+            sortSubjects(grade);
+        }
+
+        function sortSubjects(grade) {
+            const activeSubjects = document
+                .getElementById('grade' + grade)
+                .getElementsByClassName('list-group activeList')[0];
+
+            for (var i = 0; i < activeSubjects.childElementCount; i++) {
+                activeSubjects
+                    .getElementsByTagName("li")[i]
+                    .getElementsByClassName('sortNumber')[0]
+                    .innerHTML = i + 1;
+            }
+        }
+
+        function getListItem(subject, grade) {
+            const item = `
+                                <li class="list-group-item subject_${subject.id} grade${grade}"">
+                                    <div class="row">
+                                        <div class="col-2 mt-1">
+                                            <span class="sortNumber">-</span>
+                                        </div>
+                                        <div class="col mt-1">
+                                            <span class="subject-id d-none">${subject.id}</span>
+                                            <span class="subjectName">${subject.name}</span>
+                                        </div>
+                                        <div class="col-2 mt-1">
+                                            <input type="checkbox" class="form-control h-75 activeCheck " onclick='enableUpDown("${subject.id}","${grade}")' name="active" value="true" />
+                                        </div>
+                                        <div class="col">
+                                            <div class="btn-group btn-group-sm float-left">
+                                                <button type="button" disabled class="btn btn-primary upButton" onclick='swapUp("${subject.id}","${grade}");'>
+                                                    <i class="fas fa-arrow-up mt-1"></i>
+                                                </button>
+                                                <button type="button" disabled class="btn btn-primary downButton" onclick='swapDown("${subject.id}","${grade}");'>
+                                                    <i class="fas fa-arrow-down mt-1"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                `;
+            const div = document.createElement('div');
+            div.innerHTML = item.trim();
+            return div.firstChild;
+        }
+
+    </script>
+}

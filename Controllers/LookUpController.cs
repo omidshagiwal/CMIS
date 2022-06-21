@@ -44,7 +44,7 @@ namespace CMIS.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult School_Create(LookUp_School obj)
+        public IActionResult School_Create(LookupSchool obj)
         {
             var SchoolCount = _db.LookUp_School.Where(s => s.DistrictID == obj.DistrictID).Count();
             int SchoolID=0;

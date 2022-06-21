@@ -28,6 +28,12 @@ namespace CMIS.Controllers
             return View();
         }
 
+        public IActionResult NotFound(string ErrorMessage = "")
+        {
+            ViewBag.ErrorMessage = ErrorMessage;
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

@@ -44,7 +44,7 @@ namespace CMIS.Models
         [DisplayName("مکتب")]
         public int SchoolID { get; set; }
         [ForeignKey("SchoolID")]
-        public LookUp_School LookupSchool { get; set; }
+        public LookupSchool LookupSchool { get; set; }
 
         [Required]
         [DefaultValue(12)]
