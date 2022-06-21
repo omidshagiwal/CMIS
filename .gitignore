@@ -366,3 +366,5 @@ Data/Migrations/
 Migrations
 Migrations/ApplicationDbContextModelSnapshot.cs
 *.csproj
+Migrations/ApplicationDbContextModelSnapshot.cs
+Migrations/20220521141923_renamingStudent_ProfileToStudentProfile.cs
