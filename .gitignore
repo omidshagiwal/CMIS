@@ -363,8 +363,8 @@ MigrationBackup/
 FodyWeavers.xsd
 
 Data/Migrations/
-Migrations
+Migrations/
 Migrations/ApplicationDbContextModelSnapshot.cs
+Migrations/ApplicationDbContextModelSnapshot.cs
+wwwroot/resultdocuments/
 *.csproj
-Migrations/ApplicationDbContextModelSnapshot.cs
-Migrations/20220521141923_renamingStudent_ProfileToStudentProfile.cs
