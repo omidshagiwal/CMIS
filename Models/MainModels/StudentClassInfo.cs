@@ -1,5 +1,4 @@
-﻿using CMIS.Models.Main_Models;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -10,27 +9,27 @@ namespace CMIS.Models
         [Key, Column(Order = 1)]
         public string StudentId { get; set; }
         [ForeignKey("StudentId")]
-        public StudentProfile Student { get; set; }
+        public StudentProfile StudentProfile { get; set; }
 
         [Key, Column(Order = 2)]
         public int ClassId { get; set; }
         [ForeignKey("ClassId")]
-        public LookupClass Class { get; set; }
+        public LookupClass LookupClass { get; set; }
 
         [Key, Column(Order = 3)]
         public string GraduationYear { get; set; }
 
         public Nullable<int> SchoolId { get; set; }
         [ForeignKey("SchoolId")]
-        public LookupSchool School { get; set; }
+        public LookupSchool LookupSchool { get; set; }
         
         public int SectionId { get; set; }
         [ForeignKey("SectionId")]
-        public LookUp_Section Section { get; set; }
+        public LookupSection LookupSection { get; set; }
         
         public int EnrollmentStatusId { get; set; }
         [ForeignKey("EnrollmentStatusId")]
-        public Lookup_Enrollment_Status EnrollmentStatus { get; set; }
+        public LookupEnrollmentStatus EnrollmentStatus { get; set; }
 
         public bool? HasMarks { get; set; }
         public string? Remarks { get; set; }

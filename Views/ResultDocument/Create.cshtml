@@ -25,18 +25,18 @@
                 <div class="col">
                     <div class="form-group">
                         <label for="districts">ولسوالی/ناحیه</label>
-                        <select id="districts" class="form-control" onchange='getSchools("districts", "ResultDocument_SchoolID", "ResultDocument_Year")'>
+                        <select id="districts" class="form-control" onchange='getSchools("districts", "ResultDocument_SchoolId", "ResultDocument_Year")'>
                             <option selected disabled>...انتخاب نمودن...</option>
                         </select>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-group">
-                        <label asp-for="ResultDocument.SchoolID"></label>
-                        <select asp-for="ResultDocument.SchoolID" onchange='schoolSelected("ResultDocument_Year");' class="form-control">
+                        <label asp-for="ResultDocument.SchoolId"></label>
+                        <select asp-for="ResultDocument.SchoolId" onchange='schoolSelected("ResultDocument_Year");' class="form-control">
                             <option selected disabled>...انتخاب نمودن...</option>
                         </select>
-                        <span asp-validation-for="ResultDocument.SchoolID"></span>
+                        <span asp-validation-for="ResultDocument.SchoolId"></span>
                     </div>
                 </div>
                 <div class="col">
@@ -50,11 +50,11 @@
                 </div>
                 <div class="col">
                     <div class="form-group">
-                        <label asp-for="ResultDocument.SectionID"></label>
-                        <select asp-for="ResultDocument.SectionID" asp-items="@Model.Sections" class="form-control">
+                        <label asp-for="ResultDocument.SectionId"></label>
+                        <select asp-for="ResultDocument.SectionId" asp-items="@Model.Sections" class="form-control">
                             <option selected disabled>...انتخاب نمودن...</option>
                         </select>
-                        <span asp-validation-for="ResultDocument.SectionID"></span>
+                        <span asp-validation-for="ResultDocument.SectionId"></span>
                     </div>
                 </div>
                 <div class="col-2">
@@ -107,11 +107,11 @@
         $(document).ready(async function () {
             $('#provinces').select2();
             $('#districts').select2();
-            $('#ResultDocument_SchoolID').select2();
+            $('#ResultDocument_SchoolId').select2();
             $('#ResultDocument_Year').select2();
 
             await getYears("ResultDocument_Year");
-            await getSections("ResultDocument_SectionID");
+            await getSections("ResultDocument_SectionId");
         });
 
         async function getRegulation() {

@@ -36,8 +36,8 @@ namespace CMIS.Controllers
                         .Include(a => a.ResultDocument)
                         .Include(b => b.ResultDocument.LookupSchool)
                         .Include(c => c.ResultDocument.LookupSchool.District)
-                        .Include(d => d.ResultDocument.LookupSchool.District.province)
-                        .SingleOrDefault(x => x.StudentID == studentId);
+                        .Include(d => d.ResultDocument.LookupSchool.District.Province)
+                        .SingleOrDefault(x => x.StudentId == studentId);
 
                 if (resultDocument == null)
                     return RedirectToActionPermanent("NotFound", "Home",
@@ -58,11 +58,11 @@ namespace CMIS.Controllers
             examMarkVM.StudentId = student.Id;
             examMarkVM.StudentName = student.Name;
             examMarkVM.StudentFatherName = student.FatherName;
-            examMarkVM.SchoolFullName = resultDocument.ResultDocument.LookupSchool.SchoolNameDari + ", " +
-                resultDocument.ResultDocument.LookupSchool.District.DistrictName + ", " +
-                resultDocument.ResultDocument.LookupSchool.District.province.ProvinceNamePashto;
+            examMarkVM.SchoolFullName = resultDocument.ResultDocument.LookupSchool.NameDari + ", " +
+                resultDocument.ResultDocument.LookupSchool.District.NameDari + ", " +
+                resultDocument.ResultDocument.LookupSchool.District.Province.NamePashto;
             examMarkVM.GraduationYear = resultDocument.ResultDocument.Year;
-            examMarkVM.SchoolId = resultDocument.ResultDocument.SchoolID;
+            examMarkVM.SchoolId = resultDocument.ResultDocument.SchoolId;
             examMarkVM.OrderTypes = helpers.SubjectOrderTypes();
 
             return View(examMarkVM);
@@ -78,7 +78,7 @@ namespace CMIS.Controllers
 
                 var resDoc = _db.ResultDocumentStudents
                     .Include(x => x.ResultDocument)
-                    .SingleOrDefault(x => x.StudentID == marks.StudentId);
+                    .SingleOrDefault(x => x.StudentId == marks.StudentId);
                 if (resDoc == null)
                     return NotFound( getJsonResult(
                         "جدول نتایج پیدا نشد.",
@@ -113,7 +113,7 @@ namespace CMIS.Controllers
                     if (examMarks.Position == "")
                         return BadRequest( getJsonResult("درجه ضروری میباشد.") );
 
-                    var classId = _db.LookUp_Class
+                    var classId = _db.LookupClasses
                         .SingleOrDefault(x => x.ClassName == examMarks.Grade.ToString()).Id;
                     int year = (resDoc.ResultDocument.Year - 2) + (examMarks.Grade - 10);
 
@@ -139,12 +139,12 @@ namespace CMIS.Controllers
                     studentClass.GraduationYear = year.ToString();
                     studentClass.StudentId = student.Id;
                     studentClass.ClassId = classId;
-                    studentClass.SchoolId = resDoc.ResultDocument.SchoolID;
-                    studentClass.SectionId = resDoc.ResultDocument.SectionID;
+                    studentClass.SchoolId = resDoc.ResultDocument.SchoolId;
+                    studentClass.SectionId = resDoc.ResultDocument.SectionId;
                     studentClass.HasMarks = examMarks.HasMarks;
                     studentClass.Remarks = examMarks.Remarks;
                     studentClass.Position = examMarks.Position;
-                    studentClass.EnrollmentStatusId = _db.Lookup_Enrollment_Status.First().EnrollmentStatusID;
+                    studentClass.EnrollmentStatusId = _db.LookupEnrollmentStatuses.First().Id;
                     _db.StudentClassesInfo.Add(studentClass);
                 }
 

@@ -1,0 +1,27 @@
+﻿@model IEnumerable<CMIS.Models.LookupSchool>
+@{
+    ViewData["Title"] = "مکتب";
+}
+
+<div class="row">
+    <div class="col-12">
+        <a class="btn btn-primary" asp-action="Create">مکتب جدید</a>
+    </div>
+    <div class="col-12">
+        <table>
+            <thead>
+                <tr>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var school in Model)
+                {
+                    <tr>
+                        <td>@school.Id</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

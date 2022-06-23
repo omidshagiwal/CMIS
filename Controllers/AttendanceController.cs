@@ -40,14 +40,14 @@ namespace CMIS.Controllers
 
             var stdResDoc = _db.ResultDocumentStudents
                 .Include(x => x.ResultDocument)
-                .Include(x => x.ResultDocument.LookupSchool.District.province)
+                .Include(x => x.ResultDocument.LookupSchool.District.Province)
                 .Include(x => x.ResultDocument.LookupSchool.District)
                 .Include(x => x.ResultDocument.LookupSchool)
-                .SingleOrDefault(x => x.StudentID == studentId);
+                .SingleOrDefault(x => x.StudentId == studentId);
 
-            string schoolFullName = stdResDoc.ResultDocument.LookupSchool.SchoolNameDari + ", " +
-                    stdResDoc.ResultDocument.LookupSchool.District.DistrictName + ", " +
-                    stdResDoc.ResultDocument.LookupSchool.District.province.ProvinceNamePashto;
+            string schoolFullName = stdResDoc.ResultDocument.LookupSchool.NameDari + ", " +
+                    stdResDoc.ResultDocument.LookupSchool.District.NameDari + ", " +
+                    stdResDoc.ResultDocument.LookupSchool.District.Province.NameDari;
 
             List<StudentAttendance> studentAttendances = new List<StudentAttendance>();
             for (int grade = 10; grade <= 12; grade++)
@@ -58,7 +58,7 @@ namespace CMIS.Controllers
                 studentAttendance.StudentFatherName = student.FatherName;
                 studentAttendance.SchoolFullName = schoolFullName;
                 studentAttendance.Class = grade;
-                studentAttendance.ClassId = _db.LookUp_Class.SingleOrDefault(x => x.ClassName == grade + "").Id;
+                studentAttendance.ClassId = _db.LookupClasses.SingleOrDefault(x => x.ClassName == grade + "").Id;
                 studentAttendance.Year = (stdResDoc.ResultDocument.Year - 2) + (grade - 10);
                 studentAttendances.Add(studentAttendance);
             }

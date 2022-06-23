@@ -84,6 +84,10 @@
     <Compile Remove="Migrations\20220614071426_ExamMark.Designer.cs" />
     <Compile Remove="Migrations\20220618054107_addClassInfo.cs" />
     <Compile Remove="Migrations\20220618054107_addClassInfo.Designer.cs" />
+    <Compile Remove="Migrations\20220623054258_initial.cs" />
+    <Compile Remove="Migrations\20220623054258_initial.Designer.cs" />
+    <Compile Remove="Migrations\20220623063902_initial.cs" />
+    <Compile Remove="Migrations\20220623063902_initial.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

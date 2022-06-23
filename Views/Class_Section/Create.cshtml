@@ -1,4 +1,4 @@
-﻿@model Directorate_Certificate_App.Models.Models.Class_Sections
+﻿@model CMIS.Models.ClassSection
 
 @{
     ViewData["Title"] = "Create";
@@ -14,19 +14,19 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="ClassID" class="control-label"></label>
-                <select asp-for="ClassID" class="form-control" asp-items="@ViewBag.SchoolId"></select>
-                <span asp-validation-for="ClassID" class="text-danger"></span>
+                <label asp-for="ClassId" class="control-label"></label>
+                <select asp-for="ClassId" class="form-control" asp-items="@ViewBag.SchoolId"></select>
+                <span asp-validation-for="ClassId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SchoolID" class="control-label"></label>
-                <select asp-for="SchoolID" class="form-control" asp-items="@ViewBag.SchoolId"></select>
-                <span asp-validation-for="SchoolID" class="text-danger"></span>
+                <label asp-for="SchoolId" class="control-label"></label>
+                <select asp-for="SchoolId" class="form-control" asp-items="@ViewBag.SchoolId"></select>
+                <span asp-validation-for="SchoolId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SectionID" class="control-label"></label>
-                <select asp-for="SectionID" class="form-control"></select>
-                <span asp-validation-for="SectionID" class="text-danger"></span>
+                <label asp-for="SectionId" class="control-label"></label>
+                <select asp-for="SectionId" class="form-control"></select>
+                <span asp-validation-for="SectionId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Year" class="control-label"></label>

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Directorate_Certificate_App.Models.Models.Class_Sections>
+﻿@model IEnumerable<CMIS.Models.ClassSection>
 
 @{
     ViewData["Title"] = "Index";
@@ -14,13 +14,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ClassID)
+                @Html.DisplayNameFor(model => model.ClassId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SchoolID)
+                @Html.DisplayNameFor(model => model.SchoolId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SectionID)
+                @Html.DisplayNameFor(model => model.SectionId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Year)
@@ -32,21 +32,21 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ClassID)
+                @Html.DisplayFor(modelItem => item.ClassId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SchoolID)
+                @Html.DisplayFor(modelItem => item.SchoolId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SectionID)
+                @Html.DisplayFor(modelItem => item.SectionId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Year)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ClassSectionID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ClassSectionID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ClassSectionID">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }

@@ -1,5 +1,4 @@
 ﻿using CMIS.Data;
-using CMIS.Enums;
 using CMIS.Models;
 using CMIS.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +29,7 @@ namespace CMIS.Controllers
             try
             {
                 int classId = 0;
-                var classObj = _db.LookUp_Class.SingleOrDefault(x => x.ClassName == grade.ToString());
+                var classObj = _db.LookupClasses.SingleOrDefault(x => x.ClassName == grade.ToString());
                 
                 if (classObj == null) return null;
                 else classId = classObj.Id;
@@ -92,8 +91,8 @@ namespace CMIS.Controllers
         {
             try
             {
-                int schoolExist = _db.LookUp_School
-                .Where(x => x.SchoolID == subjectOrderJson.SchoolId)
+                int schoolExist = _db.LookupSchools
+                .Where(x => x.Id == subjectOrderJson.SchoolId)
                 .Count();
                 if (schoolExist <= 0 ||
                     subjectOrderJson.OrderType < 1 ||
@@ -133,7 +132,7 @@ namespace CMIS.Controllers
                     subjectOrder.OrderNumber = subjectOrderJson.OrderNumber;
                     subjectOrder.SortNumber = subject.SortNumber;
                     subjectOrder.SubjectId = subject.SubjectId;
-                    subjectOrder.ClassId = _db.LookUp_Class
+                    subjectOrder.ClassId = _db.LookupClasses
                         .SingleOrDefault(x => x.ClassName == subject.Class + "").Id;
 
                     if (subjectOrder.ClassId <= 0)

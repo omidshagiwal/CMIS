@@ -14,18 +14,18 @@
     <div class="col-lg-3 col-md-4 col-sm-4 col-12">
         <div class="form-group">
             <label for="districts">ولسوالی/ناحیه</label> <br />
-            <select id="districts" class="select-2 form-control" onchange='getSchools("districts", "SchoolID", "Year", "sections");'>
+            <select id="districts" class="select-2 form-control" onchange='getSchools("districts", "SchoolId", "Year", "sections");'>
                 <option selected disabled>...انتخاب نمودن...</option>
             </select>
         </div>
     </div>
     <div class="col-lg-3 col-md-4 col-sm-4 col-12">
         <div class="form-group">
-            <label asp-for="SchoolID"></label> <br />
-            <select asp-for="SchoolID" onchange='resetSections("sections");' class="select-2 form-control">
+            <label asp-for="SchoolId"></label> <br />
+            <select asp-for="SchoolId" onchange='resetSections("sections");' class="select-2 form-control">
                 <option selected disabled>...انتخاب نمودن...</option>
             </select>
-            <span asp-validation-for="SchoolID"></span>
+            <span asp-validation-for="SchoolId"></span>
         </div>
     </div>
     <div class="col-lg-2 col-md-6 col-sm-6 col-12">

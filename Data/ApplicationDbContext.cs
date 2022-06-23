@@ -1,12 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using CMIS.Models.Main_Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using CMIS.Models;
-using Directorate_Certificate_App.Models.Models;
-using Directorate_Certificate_App.Models;
 
 namespace CMIS.Data
 {
@@ -19,16 +14,16 @@ namespace CMIS.Data
         }
 
         //Lookups
-        public DbSet<LookUp_Province> LookUp_Province { get; set; }
-        public DbSet<LookUp_District> LookUp_District { get; set; }
-        public DbSet<LookupSchool> LookUp_School { get; set; }
-        public DbSet<LookUp_Year> LookUp_Year { get; set; }
-        public DbSet<LookupClass> LookUp_Class { get; set; }
+        public DbSet<LookupProvince> LookupProvinces { get; set; }
+        public DbSet<LookupDistrict> LookupDistricts { get; set; }
+        public DbSet<LookupSchool> LookupSchools { get; set; }
+        public DbSet<LookupYear> LookupYears { get; set; }
+        public DbSet<LookupClass> LookupClasses { get; set; }
         public DbSet<LookupSubject> LookupSubjects { get; set; }
-        public DbSet<Lookup_Enrollment_Status> Lookup_Enrollment_Status { get; set; }
-        public DbSet<LookUp_Section> LookUp_Section { get; set; }
-        public DbSet<LookUp_ClassSubject> LookUp_ClassSubject { get; set; }
-        public DbSet<LookUp_Student_Status> LookUp_Student_Status { get; set; }
+        public DbSet<LookupEnrollmentStatus> LookupEnrollmentStatuses { get; set; }
+        public DbSet<LookupSection> LookupSections { get; set; }
+        public DbSet<LookupClassSubject> LookupClassSubjects { get; set; }
+        public DbSet<LookupStudentStatus> LookUpStudentStatuses { get; set; }
 
         // Main Models
         public DbSet<SubjectOrder> SubjectsOrder { get; set; }
@@ -41,18 +36,18 @@ namespace CMIS.Data
         public DbSet<StudentAttendance> StudentsAttendance { get; set; }
 
 
-        public DbSet<Class_Sections> Class_Sections { get; set; }
+        public DbSet<ClassSection> ClassSections { get; set; }
         //public DbSet<Result_Document_Student> Result_Document_Student { get; set; }
         //public DbSet<Student_Class_Subject_Year> Student_Class_Subject_Year { get; set; }
         //public DbSet<Student_Issued_Certificate> Student_Issued_Certificate { get; set; }
-        //public DbSet<Student_Subject> Student_Subject { get; set; } //no data
+        //public DbSet<StudentSubject> StudentSubject { get; set; } //no data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<ResultDocumentStudent>()
-                .HasKey(x => new { x.ResultDocumentID, x.AsasNumber });
+                .HasKey(x => new { x.ResultDocumentId, x.AsasNumber });
 
             modelBuilder.Entity<ExamMark>()
                 .HasKey(e => new { e.Id, e.StudentId, e.ClassId });

@@ -26,7 +26,7 @@ namespace CMIS.Controllers
             IEnumerable<ResultDocument> resultDocuments = _db.ResultDocuments.Include(x => x.Students)
                 .Include(c => c.LookupSchool)
                 .Include(b => b.LookupSchool.District)
-                .Include(b => b.LookupSchool.District.province);
+                .Include(b => b.LookupSchool.District.Province);
 
             ViewBag.Provinces = helpers.getProvinces();
             return View();
@@ -38,19 +38,19 @@ namespace CMIS.Controllers
                 IEnumerable<ResultDocumentJsonViewModel> resultDocuments = _db.ResultDocuments
                     .Include(a => a.LookupSchool)
                     .Include(b => b.LookupSchool.District)
-                    .Include(c => c.LookupSchool.District.province)
+                    .Include(c => c.LookupSchool.District.Province)
                     .Include(d => d.Students)
-                    .Where(x => x.SchoolID == schoolId && x.Year == year && x.SectionID == sectionId)
+                    .Where(x => x.SchoolId == schoolId && x.Year == year && x.SectionId == sectionId)
                     .Select(d => new ResultDocumentJsonViewModel
                     {
                         Id = d.ID,
                         InsertedDate = d.InsertedDate,
                         Path = d.Path,
-                        SchoolId = d.SchoolID,
+                        SchoolId = d.SchoolId,
                         TableNumber = d.TableNumber,
                         Year = d.Year,
-                        DistrictId = d.LookupSchool.District.DistrictID,
-                        ProvinceName = d.LookupSchool.District.province.ProvinceNameEng,
+                        DistrictId = d.LookupSchool.District.Id,
+                        ProvinceName = d.LookupSchool.District.Province.NameEnglish,
                         StudentsCount = d.Students.Count()
                     }).ToList();
 
@@ -66,7 +66,7 @@ namespace CMIS.Controllers
             try
             {
                 IEnumerable<ResultDocumentStudent> resDocStudents = _db.ResultDocumentStudents
-                    .Where(x => x.ResultDocumentID == documentId);
+                    .Where(x => x.ResultDocumentId == documentId);
 
                 return Ok(resDocStudents);
             }
@@ -109,18 +109,18 @@ namespace CMIS.Controllers
             if (ModelState.IsValid)
             {
                 int documentsCount = _db.ResultDocuments
-                    .Count(x => x.SchoolID == resultDocViewModel.ResultDocument.SchoolID &&
+                    .Count(x => x.SchoolId == resultDocViewModel.ResultDocument.SchoolId &&
                     x.Year == resultDocViewModel.ResultDocument.Year);
-                string resultDocumentId = helpers.createId(resultDocViewModel.ResultDocument.SchoolID,
+                string resultDocumentId = helpers.createId(resultDocViewModel.ResultDocument.SchoolId,
                     resultDocViewModel.ResultDocument.Year - 1000, (documentsCount + 1) + "");
                 resultDocViewModel.ResultDocument.ID = resultDocumentId;
                 resultDocViewModel.ResultDocument.InsertedDate = DateTime.Now;
 
                 int year = resultDocViewModel.ResultDocument.Year;
-                int schoolId = resultDocViewModel.ResultDocument.SchoolID;
-                int districtId = _db.LookUp_School.SingleOrDefault(x => x.SchoolID == schoolId).DistrictID;
-                int provinceId = _db.LookUp_District.SingleOrDefault(x => x.DistrictID == districtId).ProvinceID;
-                string provinceName = _db.LookUp_Province.SingleOrDefault(x => x.ProvinceID == provinceId).ProvinceNameEng.ToLower();
+                int schoolId = resultDocViewModel.ResultDocument.SchoolId;
+                int districtId = _db.LookupSchools.SingleOrDefault(x => x.Id == schoolId).DistrictId;
+                int provinceId = _db.LookupDistricts.SingleOrDefault(x => x.Id == districtId).ProvinceId;
+                string provinceName = _db.LookupProvinces.SingleOrDefault(x => x.Id == provinceId).NameEnglish.ToLower();
 
                 var image = files[0];
                 if (helpers.validateImage(image))
@@ -136,9 +136,9 @@ namespace CMIS.Controllers
 
                             foreach (var student in resultDocViewModel.ResultDocumentStudents)
                             {
-                                student.ResultDocumentID = resultDocumentId;
+                                student.ResultDocumentId = resultDocumentId;
                                 student.ResultDocumentNumber = resultDocViewModel.ResultDocument.TableNumber;
-                                student.StudentID = helpers.createId(schoolId, year, student.AsasNumber);
+                                student.StudentId = helpers.createId(schoolId, year, student.AsasNumber);
                                 _db.ResultDocumentStudents.Add(student);
                             }
 

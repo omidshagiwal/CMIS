@@ -27,18 +27,18 @@ namespace CMIS.Controllers
 
         public IActionResult School_Create()
         {
-            ViewBag.Schooldropdown = _db.LookUp_Province.Select(x => new SelectListItem
+            ViewBag.Schooldropdown = _db.LookupProvinces.Select(x => new SelectListItem
             {
-                Text = x.ProvinceNamePashto,
-                Value = x.ProvinceID.ToString()
+                Text = x.NamePashto,
+                Value = x.Id.ToString()
             });
 
 
 
             //ViewBag.ProvinceId = _db.LookUp_Province.Select(p => new SelectListItem
             //{
-            //    Text = p.ProvinceNamePashto,
-            //    Value = p.ProvinceID.ToString(),
+            //    Text = p.NamePashto,
+            //    Value = p.Id.ToString(),
             //});
             return View();
         }
@@ -46,18 +46,18 @@ namespace CMIS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult School_Create(LookupSchool obj)
         {
-            var SchoolCount = _db.LookUp_School.Where(s => s.DistrictID == obj.DistrictID).Count();
+            var SchoolCount = _db.LookupSchools.Where(s => s.DistrictId == obj.DistrictId).Count();
             int SchoolID=0;
 
             if (SchoolCount > 0) {
-            var SchoolMaxId = _db.LookUp_School.Where(s => s.DistrictID == obj.DistrictID).Max().SchoolID+1;
+            var SchoolMaxId = _db.LookupSchools.Where(s => s.DistrictId == obj.DistrictId).Max().Id+1;
             }
             else
             {
-                if (obj.DistrictID > 0)
+                if (obj.DistrictId > 0)
                 {
                     string SchoolCode;
-                    var DID = obj.DistrictID.ToString();
+                    var DID = obj.DistrictId.ToString();
                     switch (DID.Length)
                     {
                         case 3:
@@ -82,8 +82,8 @@ namespace CMIS.Controllers
 
             if (SchoolID > 0)
             {
-                obj.SchoolID = SchoolID;
-                _db.LookUp_School.Add(obj);
+                obj.Id = SchoolID;
+                _db.LookupSchools.Add(obj);
                 _db.SaveChanges();
                 return View("Index");
             }
@@ -98,30 +98,30 @@ namespace CMIS.Controllers
         [HttpGet]
         public JsonResult GetDistricts(int provinceId)
         {
-            //var DistrictList = new SelectList(_db.LookUp_District.Where(d => d.ProvinceID == provinceId), "DistrictID", "DistrictName");
-            var DistrictList = _db.LookUp_District.Where(p=>p.ProvinceID== provinceId).Select(p => new SelectListItem
+            //var DistrictList = new SelectList(_db.LookupDistrict.Where(d => d.Id == provinceId), "DistrictId", "DistrictName");
+            var DistrictList = _db.LookupDistricts.Where(p=>p.ProvinceId== provinceId).Select(p => new SelectListItem
              {
-                 Text = p.DistrictName,
-                 Value = p.DistrictID.ToString(),
+                 Text = p.NameDari,
+                 Value = p.Id.ToString(),
              });
             return Json(new { data = DistrictList.ToList() });
         }
         public IActionResult Province_Create()
         {
-            IEnumerable<SelectListItem> prov = _db.LookUp_Province.Select(i => new SelectListItem
+            IEnumerable<SelectListItem> prov = _db.LookupProvinces.Select(i => new SelectListItem
             {
-                Text = i.ProvinceNamePashto,
-                Value = i.ProvinceID.ToString()
+                Text = i.NamePashto,
+                Value = i.Id.ToString()
             });
             return View("Province_Create");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Province_Create(LookUp_Province obj)
+        public IActionResult Province_Create(LookupProvince obj)
         {
-            var provinceId = _db.LookUp_Province.Select(x => x.ProvinceID).Max() + 1;
-            obj.ProvinceID = provinceId;
-            _db.LookUp_Province.Add(obj);
+            var provinceId = _db.LookupProvinces.Select(x => x.Id).Max() + 1;
+            obj.Id = provinceId;
+            _db.LookupProvinces.Add(obj);
             _db.SaveChanges();
             return View("index");
         }

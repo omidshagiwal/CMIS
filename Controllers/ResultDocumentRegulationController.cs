@@ -40,7 +40,7 @@ namespace CMIS.Controllers
             if(ModelState.IsValid)
             {
                 var isExist = _db.ResultDocumentRegulations
-                    .SingleOrDefault(x => x.SchoolID == resultDocReg.SchoolID && x.Year == resultDocReg.Year);
+                    .SingleOrDefault(x => x.SchoolId == resultDocReg.SchoolId && x.Year == resultDocReg.Year);
                 if(isExist != null)
                 {
                     ViewBag.Message = "این مکتب در این سال محدودیت دارد.";
@@ -67,7 +67,7 @@ namespace CMIS.Controllers
             Console.WriteLine("Hello" + schoolId + year);
             return Json(
                 _db.ResultDocumentRegulations
-                    .FirstOrDefault(x => x.SchoolID == schoolId && x.Year == year)
+                    .FirstOrDefault(x => x.SchoolId == schoolId && x.Year == year)
             );
         }
     }

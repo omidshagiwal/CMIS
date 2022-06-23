@@ -1,4 +1,4 @@
-﻿@model Directorate_Certificate_App.Models.Models.Class_Sections
+﻿@model CMIS.Models.ClassSection
 
 @{
     ViewData["Title"] = "Delete";
@@ -13,22 +13,22 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ClassID)
+            @Html.DisplayNameFor(model => model.ClassId)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ClassID)
+            @Html.DisplayFor(model => model.ClassId)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SchoolID)
+            @Html.DisplayNameFor(model => model.SchoolId)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SchoolID)
+            @Html.DisplayFor(model => model.SchoolId)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SectionID)
+            @Html.DisplayNameFor(model => model.SectionId)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SectionID)
+            @Html.DisplayFor(model => model.SectionId)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Year)
@@ -39,7 +39,7 @@
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="ClassSectionID" />
+        <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>

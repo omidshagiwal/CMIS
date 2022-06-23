@@ -10,9 +10,9 @@ namespace CMIS.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Required]
-        public string ResultDocumentID { get; set; }
+        public string ResultDocumentId { get; set; }
 
-        [ForeignKey("ResultDocumentID")]
+        [ForeignKey("ResultDocumentId")]
         public ResultDocument ResultDocument{ get; set; }
 
         //Primary Key
@@ -24,18 +24,23 @@ namespace CMIS.Models
         [Required(ErrorMessage = "اسم ضروری میباشد.")]
         [DisplayName("اسم")]
         public string StudentName { get; set; }
+        
         [Required(ErrorMessage = "اسم پدر ضروری میباشد.")]
         [DisplayName("اسم پدر")]
         public string FatherName { get; set; }
+        
         [Required(ErrorMessage ="نمبر جدول ضروری میباشد.")]
         [DisplayName("نمبر جدول")]
         public int ResultDocumentNumber { get; set; }
+        
         [Required(ErrorMessage = "نمبر شعبه ضروری میباشد،")]
         [DisplayName("نمبر شعبه")]
         public int ClassSectionNumber { get; set; }
+
         [Required(ErrorMessage = "نمبر ترتیب شاگرد ضروری میباشد.")]
         [DisplayName("نمبر ترتیب شاگرد")]
         public int StudentOrderNumber { get; set; }
-        public string StudentID { get; set; }
+        
+        public string StudentId { get; set; }
     }
 }

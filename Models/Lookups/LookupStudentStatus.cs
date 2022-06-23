@@ -3,13 +3,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CMIS.Models
 {
-    public class LookUp_Student_Status
+    public class LookupStudentStatus
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)] 
-        public int StatusID{ get; set; }
-        public string StatusEnglishName { get; set; }
-        public string StatusPashtoName { get; set; }
+        public int Id{ get; set; }
+
+        public string NameEnglish { get; set; }
+
+        public string NamePashto { get; set; }
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,20 +9,36 @@ namespace CMIS.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int SchoolID { get; set; }
-        public string SchoolNameDari { get; set; }
-        public string SchoolNameEnglish { get; set; }
-        public string SchoolNamePashto { get; set; }
-        public string SchoolNamePrevious { get; set; }  
-        public int CurrentStageId { get; set; } //is missing
-        public bool IsDeleted { get; set; }
-        public string EntryUserId { get; set; }
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "اسم دری ضروری میباشد.")]
+        [DisplayName("اسم دری")]
+        public string NameDari { get; set; }
+
+        [Required(ErrorMessage = "اسم پشتو ضروری میباشد.")]
+        [DisplayName("اسم پشتو")]
+        public string NamePashto { get; set; }
+
+        [Required(ErrorMessage = "اسم انگلیسی ضروری میباشد.")]
+        [DisplayName("اسم انگلیسی")]
+        public string NameEnglish { get; set; }
+
+        [DisplayName("اسم قبلی")]
+        public string NamePrevious { get; set; }
+
+        [Required(ErrorMessage = "ولسوالی ضروری میباشد.")]
+        [DisplayName("ولسوالی")]
+        public int DistrictId { get; set; }
+        [ForeignKey("DistrictId")]
+        public LookupDistrict District { get; set; }
+
         public DateTime EntryDate { get; set; }
 
+        //user model relation
+        public string EntryUserId { get; set; }
 
-        //Relation
-        public int DistrictID { get; set; }
-        [ForeignKey("DistrictID")]
-        public virtual LookUp_District District { get; set; }
+        //is missing
+        public int CurrentStageId { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

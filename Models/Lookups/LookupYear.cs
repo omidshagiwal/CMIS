@@ -1,13 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CMIS.Models.Main_Models
+namespace CMIS.Models
 {
-    public class LookUp_Year
+    public class LookupYear
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int YearID { get; set; }
-        public string YearValue { get; set; }
+        public int Id { get; set; }
+
+        [Required]
+        public int Year { get; set; }
     }
 }

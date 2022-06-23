@@ -30,7 +30,7 @@ namespace CMIS.Controllers
             {
                 student = _db.ResultDocumentStudents
                     .Include(a => a.ResultDocument)
-                    .Include(b => b.ResultDocument.LookupSchool).SingleOrDefault(x => x.StudentID == id);
+                    .Include(b => b.ResultDocument.LookupSchool).SingleOrDefault(x => x.StudentId == id);
 
                 if (student == null)
                     return RedirectToActionPermanent("NotFound", "Home",
@@ -43,14 +43,14 @@ namespace CMIS.Controllers
             }
 
             StudentProfile studentProfile = new StudentProfile();
-            studentProfile.Id = student.StudentID;
+            studentProfile.Id = student.StudentId;
             studentProfile.Name = student.StudentName;
             studentProfile.FatherName = student.FatherName;
             studentProfile.ClassEnrollment = student.StudentOrderNumber;
             studentProfile.GraduationYear = student.ResultDocument.Year + "";
             studentProfile.AsasNo = student.AsasNumber;
 
-            ViewBag.SchoolName = student.ResultDocument.LookupSchool.SchoolNameDari;
+            ViewBag.SchoolName = student.ResultDocument.LookupSchool.NameDari;
             ViewBag.Provinces = helpers.getProvinces();
 
             return View(studentProfile);
@@ -64,7 +64,7 @@ namespace CMIS.Controllers
                 var stdResDoc = _db.ResultDocumentStudents
                     .Include(a => a.ResultDocument)
                     .Include(b => b.ResultDocument.LookupSchool)
-                    .SingleOrDefault(x => x.StudentID == studentProfile.Id);
+                    .SingleOrDefault(x => x.StudentId == studentProfile.Id);
 
                 if (stdResDoc == null)
                     return RedirectToActionPermanent("Create","ResultDocument", 
@@ -90,7 +90,7 @@ namespace CMIS.Controllers
                 else
                 {
                     return RedirectToAction("Create",
-                        new { id = stdResDoc.StudentID, ErrorMessage = "معلومات کامل نیست." });
+                        new { id = stdResDoc.StudentId, ErrorMessage = "معلومات کامل نیست." });
                 }
             }
             catch (Exception e)

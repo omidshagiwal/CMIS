@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CMIS.Data;
-using Directorate_Certificate_App.Models.Models;
+using CMIS.Models;
 
 namespace CMIS.Controllers
 {
@@ -22,7 +22,7 @@ namespace CMIS.Controllers
         // GET: Class_Sections
         public async Task<IActionResult> Index()
         {
-            return View(await _db.Class_Sections.ToListAsync());
+            return View(await _db.ClassSections.ToListAsync());
         }
 
         // GET: Class_Sections/Details/5
@@ -33,8 +33,8 @@ namespace CMIS.Controllers
                 return NotFound();
             }
 
-            var class_Sections = await _db.Class_Sections
-                .FirstOrDefaultAsync(m => m.ClassSectionID == id);
+            var class_Sections = await _db.ClassSections
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (class_Sections == null)
             {
                 return NotFound();
@@ -46,10 +46,10 @@ namespace CMIS.Controllers
         // GET: Class_Sections/Create
         public IActionResult Create()
         {
-            ViewBag.SchoolId = _db.LookUp_School.Select(p => new SelectListItem
+            ViewBag.SchoolId = _db.LookupSchools.Select(p => new SelectListItem
             {
-                Text = p.SchoolNameDari,
-                Value = p.SchoolID.ToString(),
+                Text = p.NameDari,
+                Value = p.Id.ToString(),
             });
             return View();
         }
@@ -59,7 +59,7 @@ namespace CMIS.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClassSectionID,ClassID,SchoolID,SectionID,Year")] Class_Sections class_Sections)
+        public async Task<IActionResult> Create([Bind("Id,ClassId,Id,Id,Year")] ClassSection class_Sections)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +78,7 @@ namespace CMIS.Controllers
                 return NotFound();
             }
 
-            var class_Sections = await _db.Class_Sections.FindAsync(id);
+            var class_Sections = await _db.ClassSections.FindAsync(id);
             if (class_Sections == null)
             {
                 return NotFound();
@@ -91,9 +91,9 @@ namespace CMIS.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClassSectionID,ClassID,SchoolID,SectionID,Year")] Class_Sections class_Sections)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ClassId,Id,Id,Year")] ClassSection class_Sections)
         {
-            if (id != class_Sections.ClassSectionID)
+            if (id != class_Sections.Id)
             {
                 return NotFound();
             }
@@ -107,7 +107,7 @@ namespace CMIS.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!Class_SectionsExists(class_Sections.ClassSectionID))
+                    if (!Class_SectionsExists(class_Sections.Id))
                     {
                         return NotFound();
                     }
@@ -129,8 +129,8 @@ namespace CMIS.Controllers
                 return NotFound();
             }
 
-            var class_Sections = await _db.Class_Sections
-                .FirstOrDefaultAsync(m => m.ClassSectionID == id);
+            var class_Sections = await _db.ClassSections
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (class_Sections == null)
             {
                 return NotFound();
@@ -144,15 +144,15 @@ namespace CMIS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var class_Sections = await _db.Class_Sections.FindAsync(id);
-            _db.Class_Sections.Remove(class_Sections);
+            var class_Sections = await _db.ClassSections.FindAsync(id);
+            _db.ClassSections.Remove(class_Sections);
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool Class_SectionsExists(int id)
         {
-            return _db.Class_Sections.Any(e => e.ClassSectionID == id);
+            return _db.ClassSections.Any(e => e.Id == id);
         }
     }
 }

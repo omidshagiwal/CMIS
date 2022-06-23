@@ -23,15 +23,15 @@ namespace CMIS.Controllers
         }
         public IEnumerable<SelectListItem> getProvinces()
         {
-            return _db.LookUp_Province.Select(x => new SelectListItem
+            return _db.LookupProvinces.Select(x => new SelectListItem
             {
-                Value = x.ProvinceID.ToString(),
-                Text = x.ProvinceNameDari
+                Value = x.Id.ToString(),
+                Text = x.NameDari
             });
         }
         public IEnumerable<SelectListItem> getClasses()
         {
-            return _db.LookUp_Class.Select(x => new SelectListItem
+            return _db.LookupClasses.Select(x => new SelectListItem
             {
                 Value = x.Id.ToString(),
                 Text = x.ClassName
@@ -90,9 +90,9 @@ namespace CMIS.Controllers
         }
         public IEnumerable<SelectListItem> getSections()
         {
-            return _db.LookUp_Section.Select(x => new SelectListItem
+            return _db.LookupSections.Select(x => new SelectListItem
             {
-                Value = x.SectionID.ToString(),
+                Value = x.Id.ToString(),
                 Text = x.SectionNumber
             });
         }
@@ -103,17 +103,17 @@ namespace CMIS.Controllers
         public JsonResult Districts(string provinceId)
         {
             return Json(
-                    _db.LookUp_District
-                        .Where(x => x.ProvinceID.ToString() == provinceId)
-                        .Select(x => new SelectListItem(x.DistrictName, x.DistrictID.ToString()))
+                    _db.LookupDistricts
+                        .Where(x => x.ProvinceId.ToString() == provinceId)
+                        .Select(x => new SelectListItem(x.NameDari, x.Id.ToString()))
                 );
         }
         public JsonResult Schools(string districtId)
         {
             return Json(
-                    _db.LookUp_School
-                        .Where(x => x.DistrictID.ToString() == districtId)
-                        .Select(x => new SelectListItem(x.SchoolNameDari, x.SchoolID.ToString()))
+                    _db.LookupSchools
+                        .Where(x => x.DistrictId.ToString() == districtId)
+                        .Select(x => new SelectListItem(x.NameDari, x.Id.ToString()))
                 );
         }
         public JsonResult Sections()

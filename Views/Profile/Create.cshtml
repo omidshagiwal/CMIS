@@ -61,11 +61,11 @@
                         <input asp-for="AsasNo" readonly class="form-control" placeholder="نمبر اساس" />
                     </div>
                     <div class="form-group">
-                        <label asp-for="ProvinceID"></label>
-                        <select asp-items="@ViewBag.Provinces" asp-for="ProvinceID" class="form-control select-2">
+                        <label asp-for="ProvinceId"></label>
+                        <select asp-items="@ViewBag.Provinces" asp-for="ProvinceId" class="form-control select-2">
                             <option selected disabled>...انتخاب نمودن...</option>
                         </select>
-                        <span asp-validation-for="ProvinceID" class="text-danger"></span>
+                        <span asp-validation-for="ProvinceId" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="DateOfBirth"></label>

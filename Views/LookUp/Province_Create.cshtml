@@ -1,4 +1,4 @@
-﻿@model CMIS.Models.LookUp_Province
+﻿@model CMIS.Models.LookupProvince
 
 @{
     ViewData["Title"] = "School_Create";
@@ -9,19 +9,19 @@
     <div class="col-md-4 text-center">
         <form asp-action="Province_Create"> 
             <div class="form-group">
-                <label asp-for="ProvinceNamePashto" class="control-label">Name in Pashto</label>
-                <input asp-for="ProvinceNamePashto" class="form-control" />
-                <span asp-validation-for="ProvinceNamePashto" class="text-danger"></span>
+                <label asp-for="NamePashto" class="control-label">Name in Pashto</label>
+                <input asp-for="NamePashto" class="form-control" />
+                <span asp-validation-for="NamePashto" class="text-danger"></span>
             </div> 
             <div class="form-group">
-                <label asp-for="ProvinceNameDari" class="control-label">Name in Dari</label>
-                <input asp-for="ProvinceNameDari" class="form-control" />
-                <span asp-validation-for="ProvinceNameDari" class="text-danger"></span>
+                <label asp-for="NameDari" class="control-label">Name in Dari</label>
+                <input asp-for="NameDari" class="form-control" />
+                <span asp-validation-for="NameDari" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProvinceNameEng" class="control-label">Name in English</label>
-                <input asp-for="ProvinceNameEng" class="form-control" />
-                <span asp-validation-for="ProvinceNameEng" class="text-danger"></span>
+                <label asp-for="NameEnglish" class="control-label">Name in English</label>
+                <input asp-for="NameEnglish" class="form-control" />
+                <span asp-validation-for="NameEnglish" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

@@ -1,4 +1,4 @@
-﻿@model CMIS.Models.LookupSchool
+﻿@model CMIS.Models.LookupSchool 
 
 @{
     ViewData["Title"] = "School_Create";
@@ -15,8 +15,8 @@
                 </select>
             </div>
             <div class="form-group">
-                <label asp-for="DistrictID" class="control-label">District</label>
-                <select asp-for="DistrictID" class="form-control" >
+                <label asp-for="DistrictId" class="control-label">District</label>
+                <select asp-for="DistrictId" class="form-control" >
                     <option>--Select District--</option>
                 </select>
             </div>
@@ -28,19 +28,19 @@
                 </select>
             </div>*@
             <div class="form-group">
-                <label asp-for="SchoolNameDari" class="control-label"></label>
-                <input asp-for="SchoolNameDari" class="form-control" />
-                <span asp-validation-for="SchoolNameDari" class="text-danger"></span>
+                <label asp-for="NameDari" class="control-label"></label>
+                <input asp-for="NameDari" class="form-control" />
+                <span asp-validation-for="NameDari" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SchoolNameEnglish" class="control-label"></label>
-                <input asp-for="SchoolNameEnglish" class="form-control" />
-                <span asp-validation-for="SchoolNameEnglish" class="text-danger"></span>
+                <label asp-for="NameEnglish" class="control-label"></label>
+                <input asp-for="NameEnglish" class="form-control" />
+                <span asp-validation-for="NameEnglish" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SchoolNamePashto" class="control-label"></label>
-                <input asp-for="SchoolNamePashto" class="form-control" />
-                <span asp-validation-for="SchoolNamePashto" class="text-danger"></span>
+                <label asp-for="NamePashto" class="control-label"></label>
+                <input asp-for="NamePashto" class="form-control" />
+                <span asp-validation-for="NamePashto" class="text-danger"></span>
             </div>
             @*<div class="form-group">
                 <label asp-for="SchoolNamePrevious" class="control-label"></label>
